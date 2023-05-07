@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7676ac456893f85409cb03553adf2c80, type: 3}
+  m_Name: Chain_Armor
+  m_EditorClassIdentifier: 
+  itemName: "\uC0AC\uC2AC \uAC11\uC637"
+  itemDescription: "\"\uC0DD\uAC01\uBCF4\uB2E4 \uD2BC\uD2BC\uD558\uC9C0\uB9CC, \uC870\uAE08
+    \uBB34\uAC70\uC6B4 \uAC83\uC774 \uB2E8\uC810\uC774\uB2E4.\""
+  itemClass: 1
+  itemImage: {fileID: 21300000, guid: e044fac17b1d6064c8f91ad9b778da35, type: 3}
+  objectPoolName: EquipItem_ChainArmor
+  increase_Health: 25
+  increase_CriticalPercentage: 0
+  increase_CriticalValue: 0
+  increase_MoveSpeed: -0.5
+  increase_Damage: 0
+  increase_JumpPower: 0
+  increase_DashCount: 0
+  increase_JumpCount: 0

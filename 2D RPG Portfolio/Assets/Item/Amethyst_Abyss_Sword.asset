@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7676ac456893f85409cb03553adf2c80, type: 3}
+  m_Name: Amethyst_Abyss_Sword
+  m_EditorClassIdentifier: 
+  itemName: "\uC790\uC218\uC815 \uC2EC\uC5F0 \uAC80"
+  itemDescription: "\"\uC774\uAC83\uC740 \uB9C8\uCE58 \uAFC8 \uC18D \uD48D\uACBD\uCC98\uB7FC
+    \uC544\uB984\uB2E4\uC6B4 \uAC80\uC774\uC5C8\uB2E4.\""
+  itemClass: 2
+  itemImage: {fileID: 21300000, guid: 2666a1f31fbebc54a90a9984e68eafa0, type: 3}
+  objectPoolName: EquipItem_AmethystAbyssSword
+  increase_Health: 0
+  increase_CriticalPercentage: 0.1
+  increase_CriticalValue: 0.5
+  increase_MoveSpeed: 0
+  increase_Damage: 10
+  increase_JumpPower: 0
+  increase_DashCount: 0
+  increase_JumpCount: 0

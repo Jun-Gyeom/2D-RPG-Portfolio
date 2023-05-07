@@ -25,15 +25,42 @@ public class MonsterManager : EntityManager
     public int minItemDrop; // 최소 드롭 아이템 개수
     public int maxItemDrop; // 최대 드롭 아이템 개수
 
+    // 허드 텍스트 관련
+    public Transform hudPos; // 허드텍스트 생성 위치
+
     public override void Die()
     {
         base.Die();
 
         isDie = true; // 몬스터 사망
 
-        // 게임매니저의 현재 스테이지 몬스터 리스트에서 마지막 값을 삭제
-        GameManager.instance.monsterInStageList.RemoveAt(GameManager.instance.monsterInStageList.Count - 1);
+        // 박스를 부순게 아니라면 게임매니저의 현재 스테이지 몬스터 리스트에서 마지막 값을 삭제
+        if (tag != "Box")
+        {
+            GameManager.instance.monsterInStageList.RemoveAt(GameManager.instance.monsterInStageList.Count - 1);
+        }
+
+        DropItem(); // 아이템 드롭
     }
     public virtual void MonsterAI() { }
+
+    public virtual void DropItem() { }
+
+    public override void OnDrawGizmosSelected()
+    {
+        base.OnDrawGizmosSelected();
+
+        // 몬스터 AI 기즈모 (플레이어 감지 거리)
+        Color followGizmosColor = Gizmos.color;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, followDistance);
+        Gizmos.color = followGizmosColor;
+
+        // 몬스터 AI 기즈모 (플레이어 공격 거리)
+        Color attackGizmosColor = Gizmos.color;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, attackDistance);
+        Gizmos.color = attackGizmosColor;
+    }
 }
 

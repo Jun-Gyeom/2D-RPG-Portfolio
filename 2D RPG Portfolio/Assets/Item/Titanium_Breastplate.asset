@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7676ac456893f85409cb03553adf2c80, type: 3}
+  m_Name: Titanium_Breastplate
+  m_EditorClassIdentifier: 
+  itemName: "\uD2F0\uD0C0\uB284 \uD749\uAC11"
+  itemDescription: "\"\uAC00\uBCCD\uACE0 \uB2E8\uB2E8\uD55C \uCCA8\uB2E8 \uC2E0\uC18C\uC7AC\uB85C
+    \uB9CC\uB4E0 \uD749\uAC11\uC774\uB2E4.\""
+  itemClass: 2
+  itemImage: {fileID: 21300000, guid: d0ac2ae30b4bfc2429f2b1e79d6ce432, type: 3}
+  objectPoolName: EquipItem_TitaniumBreastplate
+  increase_Health: 45
+  increase_CriticalPercentage: 0.05
+  increase_CriticalValue: 0
+  increase_MoveSpeed: 0
+  increase_Damage: 0
+  increase_JumpPower: 0
+  increase_DashCount: 0
+  increase_JumpCount: 0

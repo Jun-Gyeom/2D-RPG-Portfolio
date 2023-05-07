@@ -7,6 +7,9 @@ TagManager:
   - Monster
   - Coin
   - Exp
+  - GoDownPlatform
+  - Platform
+  - Box
   layers:
   - Default
   - TransparentFX
@@ -43,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Item
+    uniqueID: 186113613
     locked: 0
