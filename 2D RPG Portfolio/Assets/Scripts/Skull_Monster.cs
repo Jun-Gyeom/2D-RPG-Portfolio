@@ -7,7 +7,6 @@ public class Skull_Monster : MonsterManager
 {
     Rigidbody2D rb;
     Animator anim;
-    Transform targetTransform; // 플레이어의 위치
 
     Transform attackPos; // 공격받았을 때 상대가 공격한 위치
 
@@ -343,7 +342,7 @@ public class Skull_Monster : MonsterManager
         }
     }
 
-    void Hide_HpBar()
+    public override void Hide_HpBar()
     {
         hp_Bar.SetActive(false);
     }

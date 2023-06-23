@@ -8,7 +8,6 @@ public class SkelManager : MonsterManager
     public Animator skelAnim; // 스켈 애니메이터
     public Animator handsAnim; // 손 애니메이터
     public Animator WeaponAnim; // 무기 애니메이터
-    public Transform targetTransform; // 플레이어의 위치
 
     public GameObject handsPosObject; // 손 위치 오브젝트
 
@@ -64,70 +63,66 @@ public class SkelManager : MonsterManager
     // 대미지 받는 함수
     public override void TakeDamage(int damage, Transform Pos, bool isCritical)
     {
-        base.TakeDamage(damage, Pos, isCritical);
+        // 죽었다면 리턴
+        if (isDie)
+        {
+            return;
+        }
 
-        // 치명타라면
-        if (isCritical)
-        {
-            // 허드 텍스트 생성
-            GameObject damage_HudText = ObjectPoolingManager.instance.GetObject("HudText_CriticalDam");
-            damage_HudText.transform.position = hudPos.position; // 허드 텍스트 위치 변경
-            damage_HudText.transform.GetChild(0).GetComponent<Damage_HudText>().ShowDamageText(Mathf.RoundToInt(damage * (GameManager.instance.critical_Value + GameManager.instance.increased_CriticalValue))); // 허드 텍스트가 표시 할 대미지 전달 (그림자)
-            damage_HudText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<DamageHudText_Shadow>().ShowDamageText(Mathf.RoundToInt(damage * (GameManager.instance.critical_Value + GameManager.instance.increased_CriticalValue))); // 허드 텍스트가 표시 할 대미지 전달 (텍스트)
-        }
-        else
-        {
-            // 허드 텍스트 생성
-            GameObject damage_HudText = ObjectPoolingManager.instance.GetObject("HudText_Damage");
-            damage_HudText.transform.position = hudPos.position; // 허드 텍스트 위치 변경
-            damage_HudText.transform.GetChild(0).GetComponent<Damage_HudText>().ShowDamageText(damage); // 허드 텍스트가 표시 할 대미지 전달 (그림자)
-            damage_HudText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<DamageHudText_Shadow>().ShowDamageText(damage); // 허드 텍스트가 표시 할 대미지 전달 (텍스트)
-        }
+        hp_Bar.SetActive(true); // HP 바 활성화
+
+        CancelInvoke("Hide_HpBar"); // 초기화
+        Invoke("Hide_HpBar", 2f); // 2초 후 HP 바 비활성화
+
+        base.TakeDamage(damage, Pos, isCritical); // 대미지 적용
 
         skelAnim.SetTrigger("Hit"); // 맞는 애니메이션
         handsAnim.SetTrigger("Hit"); // 손 맞는 애니메이션
 
-        // 죽지 않았을 때만
-        if (!isDie)
+        // 크리티컬이라면
+        if (isCritical)
         {
-            // 크리티컬이라면
-            if (isCritical)
+            // 크리티컬 대미지 허드 텍스트 생성
+            GameObject damage_HudText = ObjectPoolingManager.instance.GetObject("HudText_CriticalDam");
+            damage_HudText.transform.position = hudPos.position; // 허드 텍스트 위치 변경
+            damage_HudText.transform.GetChild(0).GetComponent<Damage_HudText>().ShowDamageText(Mathf.RoundToInt(damage * (GameManager.instance.critical_Value + GameManager.instance.increased_CriticalValue))); // 허드 텍스트가 표시 할 대미지 전달 (그림자)
+            damage_HudText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<DamageHudText_Shadow>().ShowDamageText(Mathf.RoundToInt(damage * (GameManager.instance.critical_Value + GameManager.instance.increased_CriticalValue))); // 허드 텍스트가 표시 할 대미지 전달 (텍스트)
+
+            // 넉백
+            float x = transform.position.x - Pos.position.x; // 밀려날 방향
+            if (x > 0)
             {
-                // 넉백
-                float x = transform.position.x - Pos.position.x; // 밀려날 방향
-                if (x > 0)
-                {
-                    rb.velocity = new Vector2(5f, rb.velocity.y); // 오른쪽으로 5만큼 넉백 
-                }
-                else if (x < 0)
-                {
-                    rb.velocity = new Vector2(-5f, rb.velocity.y); // 왼쪽으로 5만큼 넉백 
-                }
+                rb.velocity = new Vector2(5f, rb.velocity.y); // 오른쪽으로 5만큼 넉백 
             }
-            else
+            else if (x < 0)
             {
-                // 넉백
-                float x = transform.position.x - Pos.position.x; // 밀려날 방향
-                if (x > 0)
-                {
-                    rb.velocity = new Vector2(3f, rb.velocity.y); // 오른쪽으로 3만큼 넉백 
-                }
-                else if (x < 0)
-                {
-                    rb.velocity = new Vector2(-3f, rb.velocity.y); // 왼쪽으로 3만큼 넉백 
-                }
+                rb.velocity = new Vector2(-5f, rb.velocity.y); // 왼쪽으로 5만큼 넉백 
             }
-
-            hp_Bar.SetActive(true); // HP 바 활성화
-
-            CancelInvoke("Hide_HpBar"); // 초기화
-            Invoke("Hide_HpBar", 2f); // 2초 후 HP 바 비활성화
-
-            // 공격 끊기 (보류)
-            //nextAttackTime = Time.time + attackCoolDown;
-
-            hp_fill.fillAmount = health / maxHealth; // 체력바 조절
         }
+        else
+        {
+            // 대미지 허드 텍스트 생성
+            GameObject damage_HudText = ObjectPoolingManager.instance.GetObject("HudText_Damage");
+            damage_HudText.transform.position = hudPos.position; // 허드 텍스트 위치 변경
+            damage_HudText.transform.GetChild(0).GetComponent<Damage_HudText>().ShowDamageText(damage); // 허드 텍스트가 표시 할 대미지 전달 (그림자)
+            damage_HudText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<DamageHudText_Shadow>().ShowDamageText(damage); // 허드 텍스트가 표시 할 대미지 전달 (텍스트)
+
+            // 넉백
+            float x = transform.position.x - Pos.position.x; // 밀려날 방향
+            if (x > 0)
+            {
+                rb.velocity = new Vector2(3f, rb.velocity.y); // 오른쪽으로 3만큼 넉백 
+            }
+            else if (x < 0)
+            {
+                rb.velocity = new Vector2(-3f, rb.velocity.y); // 왼쪽으로 3만큼 넉백 
+            }
+        }
+
+        // 공격 끊기 (보류)
+        //nextAttackTime = Time.time + attackCoolDown;
+
+        hp_fill.fillAmount = health / maxHealth; // 체력바 조절
     }
 
     public override void Die()
@@ -136,9 +131,9 @@ public class SkelManager : MonsterManager
 
         skelAnim.SetTrigger("Die"); // 죽는 애니메이션
 
-        GetComponent<Collider2D>().enabled = false; // 콜라이더 끄기
-        rb.isKinematic = true; // 위치 고정
-        rb.velocity = new Vector2(0, 0); // 위치 고정
+        //GetComponent<Collider2D>().enabled = false; // 콜라이더 끄기
+        //rb.isKinematic = true; // 위치 고정
+        //rb.velocity = new Vector2(0, 0); // 위치 고정
 
         handsPosObject.SetActive(false); // 손과 무기 비활성화
         hp_Bar.gameObject.SetActive(false); // HP 바 비활성화
@@ -148,8 +143,6 @@ public class SkelManager : MonsterManager
     public override void MonsterAI()
     {
         base.MonsterAI();
-
-        
     }
 
     // 몬스터가 낭떨어지로 가는 것을 막는 함수
@@ -201,11 +194,5 @@ public class SkelManager : MonsterManager
         // 스켈 머리 오브젝트 드롭
         GameObject skelHead = ObjectPoolingManager.instance.GetObject("Object_SkelHead"); // 오브젝트 풀에서 스켈 머리 대여
         skelHead.transform.position = this.transform.position; // 위치 초기화
-    }
-
-    // HP바를 숨기는 함수
-    public virtual void Hide_HpBar()
-    {
-        hp_Bar.SetActive(false);
     }
 }

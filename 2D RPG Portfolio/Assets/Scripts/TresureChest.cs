@@ -55,6 +55,8 @@ public class TresureChest : MonoBehaviour
     {
         isOpen = true; // 상자 열림 처리
 
+        SoundManager.instance.PlaySound("OpenTresure");
+
         keyUI_F.SetActive(false);
 
         anim.SetBool("isOpen", true); // 상자 열기 애니메이션 재생

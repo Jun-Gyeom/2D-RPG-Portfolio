@@ -38,6 +38,9 @@ public class Bullion : MonoBehaviour
         {
             GameManager.instance.gold += 100f; // 골드 100 획득
 
+            // 획득 사운드 재생
+            SoundManager.instance.PlaySound("GetCoin");
+
             // 허드 텍스트 생성
             GameObject getGold_HudText = ObjectPoolingManager.instance.GetObject("HudText_GetGold");
             getGold_HudText.transform.position = hudPos.position; // 허드 텍스트 위치 변경

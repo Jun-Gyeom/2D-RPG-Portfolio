@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField]
     public Slot[] slots;
+    public Slot[] deathMenuSlots;
 
     public TMP_Text goldText; // 골드 텍스트
     public TMP_Text getItemPanel_ItemName; // 아이템 획득 패널 아이템 이름

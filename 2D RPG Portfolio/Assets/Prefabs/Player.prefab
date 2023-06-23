@@ -9732,6 +9732,7 @@ GameObject:
   - component: {fileID: 4109158951589281531}
   - component: {fileID: 4109158951589281532}
   - component: {fileID: 4109158951589281533}
+  - component: {fileID: 1136223532841291347}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -9800,7 +9801,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 7
+  m_SortingOrder: 9
   m_Sprite: {fileID: 1331310677, guid: 608381798e79ed746b398447593aefd4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -9927,15 +9928,19 @@ MonoBehaviour:
   - 1.0625
   attackCoolDown: 0.5
   nextAttackTime: 1
+  sr: {fileID: 0}
+  hitAnimFadeTime: 0.5
+  anim: {fileID: 0}
   jumpCount: 0
   isWall: 0
-  wallSlideSpeed: 0.75
+  wallSlideSpeed: 0.8125
   attackCombo: 0
+  canHitTime: 0.5
   isCritical: 0
+  canHit: 1
   dashDistance: 7.5
   dashCooldown: 2
   dashChargeCount: 0
-  damageScreen_AlphaSpeed: 15
   hp_Bar: {fileID: 0}
   hp_fill_GameObject: {fileID: 0}
   hp_fill_Lerp_GameObject: {fileID: 0}
@@ -9960,6 +9965,15 @@ MonoBehaviour:
   dashFrame5: {fileID: 0}
   dashFrame6: {fileID: 0}
   gaugeLastFrame: {fileID: 0}
+  damageScreen_AlphaSpeed: 3
+--- !u!81 &1136223532841291347
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4109158951589281525}
+  m_Enabled: 1
 --- !u!1 &4109158952366071001
 GameObject:
   m_ObjectHideFlags: 0

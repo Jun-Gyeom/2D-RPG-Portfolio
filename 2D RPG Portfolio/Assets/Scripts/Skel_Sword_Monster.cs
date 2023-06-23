@@ -49,12 +49,17 @@ public class Skel_Sword_Monster : SkelManager
     {
         base.Attack();
 
+        // 공격 사운드 재생
+        SoundManager.instance.PlaySound("SwordSkel_Attack");
+
         Collider2D[] players = Physics2D.OverlapCircleAll(attackTransform[0].position, attackRadius[0], LayerMask.GetMask("Player"));
 
         if (players != null)
         {
             foreach (Collider2D player in players)
             {
+                GameManager.instance.failCause = "단검 스켈레톤에게 패배"; // 사망 이유
+
                 attackPos = transform;
                 player.GetComponent<PlayerManager>().TakeDamage(attackDamage, attackPos, false); // 마지막 인수 = 몬스터는 크리티컬 공격 없음
             }

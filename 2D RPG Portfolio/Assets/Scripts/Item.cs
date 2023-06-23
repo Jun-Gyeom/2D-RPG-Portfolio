@@ -41,6 +41,9 @@ public class Item : MonoBehaviour
         {
             inventory.AcquireItem(gameObject);
 
+            // 효과음
+            SoundManager.instance.PlaySound("PickUpItem");
+
             bc.enabled = false; // 다시 트리거 비활성화
         }
     }

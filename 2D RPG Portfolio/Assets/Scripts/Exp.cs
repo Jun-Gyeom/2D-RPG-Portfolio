@@ -38,6 +38,9 @@ public class Exp : MonoBehaviour
         {
             GameManager.instance.exp += 10f; // 경험치 10 획득
 
+            // 획득 사운드 재생
+            SoundManager.instance.PlaySound("GetExp");
+
             // 허드 텍스트 생성
             GameObject getExp_HudText = ObjectPoolingManager.instance.GetObject("HudText_GetExp");
             getExp_HudText.transform.position = hudPos.position; // 허드 텍스트 위치 변경

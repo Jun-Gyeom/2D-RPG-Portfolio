@@ -14,11 +14,16 @@ public class ObjectPoolingManager : MonoBehaviour
     public GameObject item_Coin_Prefab;
     public GameObject item_Bullion_Prefab;
     public GameObject item_Exp_Prefab;
+    public GameObject item_FairyS_Prefab;
+    public GameObject item_FairyM_Prefab;
+    public GameObject item_FairyL_Prefab;
+    public GameObject item_FairyXL_Prefab;
 
     public GameObject hudText_GetGoldText_Prefab;
     public GameObject hudText_GetExpText_Prefab;
     public GameObject hudText_DamageText_Prefab;
     public GameObject hudText_CriticalDamText_Prefab;
+    public GameObject hudText_GetHpText_Prefab;
 
     public GameObject equipItem_GraveSword_Prefab;
     public GameObject equipItem_InfernoBlade_Prefab;
@@ -32,8 +37,13 @@ public class ObjectPoolingManager : MonoBehaviour
     public GameObject equipItem_MetalShoes_Prefab;
 
     public GameObject bullet_Arrow_Prefab;
+    public GameObject bullet_FireBall_Prefab;
+    public GameObject bullet_MusicNote_Prefab;
+    public GameObject bullet_ShadowBall_Prefab;
+    public GameObject bullet_BossSword_Prefab;
 
     public GameObject effect_ArrowHit_Prefab;
+    public GameObject effect_BossSwordHit_Prefab;
 
     public GameObject object_SkelHead_Prefab;
     public GameObject object_BoxPiece_Prefab;
@@ -45,11 +55,16 @@ public class ObjectPoolingManager : MonoBehaviour
     GameObject[] item_Coin; // 코인
     GameObject[] item_Bullion; // 금괴
     GameObject[] item_Exp; // 경험치
+    GameObject[] item_FairyS; // 페어리 S
+    GameObject[] item_FairyM; // 페어리 M
+    GameObject[] item_FairyL; // 페어리 L
+    GameObject[] item_FairyXL; // 페어리 XL
 
     GameObject[] hudText_GetGoldText; // 골드 획득 허드텍스트
     GameObject[] hudText_GetExpText; // 경험치 획득 허드텍스트
     GameObject[] hudText_DamageText; // 대미지 허드텍스트
     GameObject[] hudText_CriticalDamText; // 크리티컬 대미지 허드텍스트
+    GameObject[] hudText_GetHpText; // HP 획득 허드텍스트
 
     GameObject[] equipItem_GraveSword; // 그레이브 소드 아이템
     GameObject[] equipItem_InfernoBlade; // 인페르노 블레이드 아이템
@@ -63,8 +78,13 @@ public class ObjectPoolingManager : MonoBehaviour
     GameObject[] equipItem_MetalShoes; // 강철 신발 아이템
 
     GameObject[] bullet_Arrow; // 화살 발사체
+    GameObject[] bullet_FireBall; // 파이어볼 발사체
+    GameObject[] bullet_MusicNote; // 음표 발사체
+    GameObject[] bullet_ShadowBall; // 섀도우볼 발사체
+    GameObject[] bullet_BossSword; // 보스 검 발사체
 
     GameObject[] effect_ArrowHit; // 화살 충돌 이펙트
+    GameObject[] effect_BossSwordHit; // 보스 검 충돌 이펙트
 
     GameObject[] object_SkelHead; // 스켈 머리 오브젝트
     GameObject[] object_BoxPiece; // 박스 파편 오브젝트
@@ -74,8 +94,6 @@ public class ObjectPoolingManager : MonoBehaviour
 
     private void Awake()
     {
-
-
         // 싱글톤 패턴
         if (instance == null) // 싱글톤 변수가 비어있으면
         {
@@ -93,13 +111,18 @@ public class ObjectPoolingManager : MonoBehaviour
         enemy_Skull = new GameObject[50];
 
         item_Coin = new GameObject[300];
-        item_Bullion = new GameObject[100];
+        item_Bullion = new GameObject[150];
         item_Exp = new GameObject[300];
+        item_FairyS = new GameObject[50];
+        item_FairyM = new GameObject[10];
+        item_FairyL = new GameObject[10];
+        item_FairyXL = new GameObject[10];
 
-        hudText_GetGoldText = new GameObject[50];
-        hudText_GetExpText = new GameObject[50];
-        hudText_DamageText = new GameObject[50];
-        hudText_CriticalDamText = new GameObject[50];
+        hudText_GetGoldText = new GameObject[150];
+        hudText_GetExpText = new GameObject[150];
+        hudText_DamageText = new GameObject[150];
+        hudText_CriticalDamText = new GameObject[150];
+        hudText_GetHpText = new GameObject[50];
 
         equipItem_GraveSword = new GameObject[10];
         equipItem_InfernoBlade = new GameObject[10];
@@ -113,8 +136,13 @@ public class ObjectPoolingManager : MonoBehaviour
         equipItem_JetPack = new GameObject[10];
 
         bullet_Arrow = new GameObject[50];
+        bullet_FireBall = new GameObject[150];
+        bullet_MusicNote = new GameObject[100];
+        bullet_ShadowBall = new GameObject[300];
+        bullet_BossSword = new GameObject[30];
 
         effect_ArrowHit = new GameObject[50];
+        effect_BossSwordHit = new GameObject[30];
 
         object_SkelHead = new GameObject[50];
         object_BoxPiece = new GameObject[50];
@@ -127,14 +155,6 @@ public class ObjectPoolingManager : MonoBehaviour
     void Generate()
     {
         // 배열의 길이만큼 오브젝트를 미리 생성
-        
-        // 스컬 몬스터
-        for (int i = 0; i < enemy_Skull.Length; i++)
-        {
-            enemy_Skull[i] = Instantiate(enemy_Skull_Prefab); // 인스턴스 생성
-            enemy_Skull[i].SetActive(false); // 생성 후 바로 비활성화
-            DontDestroyOnLoad(enemy_Skull[i]); // 씬 변경 시에도 삭제되지 않음
-        }
 
         // 코인
         for (int i = 0; i < item_Coin.Length; i++)
@@ -158,6 +178,38 @@ public class ObjectPoolingManager : MonoBehaviour
             item_Exp[i] = Instantiate(item_Exp_Prefab); // 인스턴스 생성
             item_Exp[i].SetActive(false); // 생성 후 바로 비활성화
             DontDestroyOnLoad(item_Exp[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // 페어리 S
+        for (int i = 0; i < item_FairyS.Length; i++)
+        {
+            item_FairyS[i] = Instantiate(item_FairyS_Prefab); // 인스턴스 생성
+            item_FairyS[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(item_FairyS[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // 페어리 M
+        for (int i = 0; i < item_FairyM.Length; i++)
+        {
+            item_FairyM[i] = Instantiate(item_FairyM_Prefab); // 인스턴스 생성
+            item_FairyM[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(item_FairyM[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // 페어리 L
+        for (int i = 0; i < item_FairyL.Length; i++)
+        {
+            item_FairyL[i] = Instantiate(item_FairyL_Prefab); // 인스턴스 생성
+            item_FairyL[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(item_FairyL[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // 페어리 XL
+        for (int i = 0; i < item_FairyXL.Length; i++)
+        {
+            item_FairyXL[i] = Instantiate(item_FairyXL_Prefab); // 인스턴스 생성
+            item_FairyXL[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(item_FairyXL[i]); // 씬 변경 시에도 삭제되지 않음
         }
 
         // 골드 획득 허드텍스트
@@ -190,6 +242,14 @@ public class ObjectPoolingManager : MonoBehaviour
             hudText_CriticalDamText[i] = Instantiate(hudText_CriticalDamText_Prefab); // 인스턴스 생성
             hudText_CriticalDamText[i].SetActive(false); // 생성 후 바로 비활성화
             DontDestroyOnLoad(hudText_CriticalDamText[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // HP 획득 허드텍스트
+        for (int i = 0; i < hudText_GetHpText.Length; i++)
+        {
+            hudText_GetHpText[i] = Instantiate(hudText_GetHpText_Prefab); // 인스턴스 생성
+            hudText_GetHpText[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(hudText_GetHpText[i]); // 씬 변경 시에도 삭제되지 않음
         }
 
         // 그레이브 소드 아이템
@@ -280,12 +340,52 @@ public class ObjectPoolingManager : MonoBehaviour
             DontDestroyOnLoad(bullet_Arrow[i]); // 씬 변경 시에도 삭제되지 않음
         }
 
+        // 파이어볼 발사체
+        for (int i = 0; i < bullet_FireBall.Length; i++)
+        {
+            bullet_FireBall[i] = Instantiate(bullet_FireBall_Prefab); // 인스턴스 생성
+            bullet_FireBall[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(bullet_FireBall[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // 음표 발사체
+        for (int i = 0; i < bullet_MusicNote.Length; i++)
+        {
+            bullet_MusicNote[i] = Instantiate(bullet_MusicNote_Prefab); // 인스턴스 생성
+            bullet_MusicNote[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(bullet_MusicNote[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // 섀도우볼 발사체
+        for (int i = 0; i < bullet_ShadowBall.Length; i++)
+        {
+            bullet_ShadowBall[i] = Instantiate(bullet_ShadowBall_Prefab); // 인스턴스 생성
+            bullet_ShadowBall[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(bullet_ShadowBall[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // 보스 검 발사체
+        for (int i = 0; i < bullet_BossSword.Length; i++)
+        {
+            bullet_BossSword[i] = Instantiate(bullet_BossSword_Prefab); // 인스턴스 생성
+            bullet_BossSword[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(bullet_BossSword[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
         // 화살 충돌 이펙트
         for (int i = 0; i < effect_ArrowHit.Length; i++)
         {
             effect_ArrowHit[i] = Instantiate(effect_ArrowHit_Prefab); // 인스턴스 생성
             effect_ArrowHit[i].SetActive(false); // 생성 후 바로 비활성화
             DontDestroyOnLoad(effect_ArrowHit[i]); // 씬 변경 시에도 삭제되지 않음
+        }
+
+        // 보스 검 충돌 이펙트
+        for (int i = 0; i < effect_BossSwordHit.Length; i++)
+        {
+            effect_BossSwordHit[i] = Instantiate(effect_BossSwordHit_Prefab); // 인스턴스 생성
+            effect_BossSwordHit[i].SetActive(false); // 생성 후 바로 비활성화
+            DontDestroyOnLoad(effect_BossSwordHit[i]); // 씬 변경 시에도 삭제되지 않음
         }
 
         // 스켈 머리 오브젝트
@@ -330,6 +430,18 @@ public class ObjectPoolingManager : MonoBehaviour
             case "Item_Exp":
                 targetPool = item_Exp;
                 break;
+            case "Item_FairyS":
+                targetPool = item_FairyS;
+                break;
+            case "Item_FairyM":
+                targetPool = item_FairyM;
+                break;
+            case "Item_FairyL":
+                targetPool = item_FairyL;
+                break;
+            case "Item_FairyXL":
+                targetPool = item_FairyXL;
+                break;
             case "HudText_GetGold":
                 targetPool = hudText_GetGoldText;
                 break;
@@ -341,6 +453,9 @@ public class ObjectPoolingManager : MonoBehaviour
                 break;
             case "HudText_CriticalDam":
                 targetPool = hudText_CriticalDamText;
+                break;
+            case "HudText_GetHp":
+                targetPool = hudText_GetHpText;
                 break;
             case "EquipItem_GraveSword":
                 targetPool = equipItem_GraveSword;
@@ -375,8 +490,23 @@ public class ObjectPoolingManager : MonoBehaviour
             case "Bullet_Arrow":
                 targetPool = bullet_Arrow;
                 break;
+            case "Bullet_FireBall":
+                targetPool = bullet_FireBall;
+                break;
+            case "Bullet_MusicNote":
+                targetPool = bullet_MusicNote;
+                break;
+            case "Bullet_ShadowBall":
+                targetPool = bullet_ShadowBall;
+                break;
+            case "Bullet_BossSword":
+                targetPool = bullet_BossSword;
+                break;
             case "Effect_ArrowHit":
                 targetPool = effect_ArrowHit;
+                break;
+            case "Effect_BossSwordHit":
+                targetPool = effect_BossSwordHit;
                 break;
             case "Object_SkelHead":
                 targetPool = object_SkelHead;
@@ -436,6 +566,46 @@ public class ObjectPoolingManager : MonoBehaviour
             if (item_Bullion[i].activeSelf)
             {
                 item_Bullion[i].SetActive(false); // 오브젝트 비활성화
+            }
+        }
+
+        // 페어리 S
+        for (int i = 0; i < item_FairyS.Length; i++)
+        {
+            // 활성화 된 오브젝트를 찾았다면
+            if (item_FairyS[i].activeSelf)
+            {
+                item_FairyS[i].SetActive(false); // 오브젝트 비활성화
+            }
+        }
+
+        // 페어리 M
+        for (int i = 0; i < item_FairyM.Length; i++)
+        {
+            // 활성화 된 오브젝트를 찾았다면
+            if (item_FairyM[i].activeSelf)
+            {
+                item_FairyM[i].SetActive(false); // 오브젝트 비활성화
+            }
+        }
+
+        // 페어리 L
+        for (int i = 0; i < item_FairyL.Length; i++)
+        {
+            // 활성화 된 오브젝트를 찾았다면
+            if (item_FairyL[i].activeSelf)
+            {
+                item_FairyL[i].SetActive(false); // 오브젝트 비활성화
+            }
+        }
+
+        // 페어리 XL
+        for (int i = 0; i < item_FairyXL.Length; i++)
+        {
+            // 활성화 된 오브젝트를 찾았다면
+            if (item_FairyXL[i].activeSelf)
+            {
+                item_FairyXL[i].SetActive(false); // 오브젝트 비활성화
             }
         }
 
@@ -549,6 +719,46 @@ public class ObjectPoolingManager : MonoBehaviour
             }
         }
 
+        // 파이어볼 발사체
+        for (int i = 0; i < bullet_FireBall.Length; i++)
+        {
+            // 활성화 된 오브젝트를 찾았다면
+            if (bullet_FireBall[i].activeSelf)
+            {
+                bullet_FireBall[i].SetActive(false); // 오브젝트 비활성화
+            }
+        }
+
+        // 음표 발사체
+        for (int i = 0; i < bullet_MusicNote.Length; i++)
+        {
+            // 활성화 된 오브젝트를 찾았다면
+            if (bullet_MusicNote[i].activeSelf)
+            {
+                bullet_MusicNote[i].SetActive(false); // 오브젝트 비활성화
+            }
+        }
+
+        // 섀도우볼 발사체
+        for (int i = 0; i < bullet_ShadowBall.Length; i++)
+        {
+            // 활성화 된 오브젝트를 찾았다면
+            if (bullet_ShadowBall[i].activeSelf)
+            {
+                bullet_ShadowBall[i].SetActive(false); // 오브젝트 비활성화
+            }
+        }
+
+        // 보스 검 발사체
+        for (int i = 0; i < bullet_BossSword.Length; i++)
+        {
+            // 활성화 된 오브젝트를 찾았다면
+            if (bullet_BossSword[i].activeSelf)
+            {
+                bullet_BossSword[i].SetActive(false); // 오브젝트 비활성화
+            }
+        }
+
         // 스켈 머리 오브젝트
         for (int i = 0; i < object_SkelHead.Length; i++)
         {
@@ -560,12 +770,12 @@ public class ObjectPoolingManager : MonoBehaviour
         }
 
         // 박스 파편 오브젝트
-        for (int i = 0; i < object_BigBoxPiece.Length; i++)
+        for (int i = 0; i < object_BoxPiece.Length; i++)
         {
             // 활성화 된 오브젝트를 찾았다면
-            if (object_BigBoxPiece[i].activeSelf)
+            if (object_BoxPiece[i].activeSelf)
             {
-                object_BigBoxPiece[i].SetActive(false); // 오브젝트 비활성화
+                object_BoxPiece[i].SetActive(false); // 오브젝트 비활성화
             }
         }
 

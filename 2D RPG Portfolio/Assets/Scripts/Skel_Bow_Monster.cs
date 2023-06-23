@@ -9,7 +9,6 @@ public class Skel_Bow_Monster : SkelManager
 
     Rigidbody2D arrowRb; // 화살 리지드바디
 
-    public GameObject tempPrefab;
     public Animator arrowHitFXAnim; // 화살 충돌 이펙트 애니메이터
 
     public Animator secondHandsAnim; // 두 번째 손 애니메이터
@@ -33,7 +32,7 @@ public class Skel_Bow_Monster : SkelManager
 
     private void FixedUpdate()
     {
-        // 선형보간 HP, EXP 바
+        // 선형보간 HP 바
         hp_fill_Lerp.fillAmount = Mathf.Lerp(hp_fill_Lerp.fillAmount, hp_fill.fillAmount, Time.deltaTime * 7.5f);
 
         // 몬스터가 죽었다면 리턴
@@ -64,6 +63,9 @@ public class Skel_Bow_Monster : SkelManager
         // 오브젝트 풀에서 화살 프리팹 대여
         GameObject arrow = ObjectPoolingManager.instance.GetObject("Bullet_Arrow");
         arrowRb = arrow.GetComponent<Rigidbody2D>();
+
+        // 사운드 재생
+        SoundManager.instance.PlaySound("SkelBow_Shot");
 
         ar = arrow.GetComponent<Arrow>();
         ar.skel = GetComponent<Skel_Bow_Monster>();
@@ -234,7 +236,6 @@ public class Skel_Bow_Monster : SkelManager
         {
             handsPosObject.transform.right = -dir.normalized;
         }
-
     }
     
     // 조준 해제 함수

@@ -8,6 +8,8 @@ public class MonsterManager : EntityManager
     public float followDistance; // 플레이어를 감지하는 거리
     public float attackDistance; // 플레이어를 공격하는 거리
 
+    public Transform targetTransform; // 플레이어의 위치
+
     public float nextThinkTime; // 다음 행동을 결정하기까지 걸리는 시간
     public float thinkTime; // 행동을 결정하고부터 현재까지의 시간
     public int nextMove; // 몬스터의 이동 방향 (-1, 0, 1)
@@ -28,9 +30,17 @@ public class MonsterManager : EntityManager
     // 허드 텍스트 관련
     public Transform hudPos; // 허드텍스트 생성 위치
 
+    // 파티클 관련
+    public ParticleSystem monsetDie_Particle; // 사망 파티클
+
     public override void Die()
     {
         base.Die();
+
+        // 죽는 사운드
+        SoundManager.instance.PlaySound("EnemyDie");
+
+        monsetDie_Particle.Play(); // 사망 파티클 재생
 
         isDie = true; // 몬스터 사망
 
@@ -38,10 +48,24 @@ public class MonsterManager : EntityManager
         if (tag != "Box")
         {
             GameManager.instance.monsterInStageList.RemoveAt(GameManager.instance.monsterInStageList.Count - 1);
+
+            // 몬스터 리스트의 수가 0이 되었다면
+            if (GameManager.instance.monsterInStageList.Count == 0)
+            {
+                // 포탈 열림 사운드 재생
+                SoundManager.instance.PlaySound("OpenPortal");
+            }
         }
 
         DropItem(); // 아이템 드롭
     }
+
+    // HP바를 숨기는 함수
+    public virtual void Hide_HpBar()
+    {
+        hp_Bar.SetActive(false);
+    }
+
     public virtual void MonsterAI() { }
 
     public virtual void DropItem() { }

@@ -27,6 +27,9 @@ public class Box : EntityManager
         GameObject boxPiece =  ObjectPoolingManager.instance.GetObject("Object_BoxPiece");
         boxPiece.transform.position = transform.position;
 
+        // 파괴 효과음 재생
+        SoundManager.instance.PlaySound("BreakBox");
+
         DropItem(); // 아이템 드롭
     }
 

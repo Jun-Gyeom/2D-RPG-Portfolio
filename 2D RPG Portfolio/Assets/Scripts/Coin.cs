@@ -36,13 +36,16 @@ public class Coin : MonoBehaviour
         // 트리거를 발동시킨 오브젝트의 태그가 플레이어이고 플레이어가 죽지 않았을 때
         if (collision.gameObject.CompareTag("Player") && !GameManager.instance.isDie)
         {
-            GameManager.instance.gold += 10f; // 골드 10 획득
+            GameManager.instance.gold += 25f; // 골드 25 획득
+
+            // 획득 사운드 재생
+            SoundManager.instance.PlaySound("GetCoin");
 
             // 허드 텍스트 생성
             GameObject getGold_HudText = ObjectPoolingManager.instance.GetObject("HudText_GetGold");
             getGold_HudText.transform.position = hudPos.position; // 허드 텍스트 위치 변경
-            getGold_HudText.transform.GetChild(0).GetComponent<GetGold_HudText>().ShowGetGoldText(10); // 허드 텍스트가 표시 할 골드량 전달 (그림자)
-            getGold_HudText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<GetGoldHudText_Shadow>().ShowGetGoldText(10); // 허드 텍스트가 표시 할 골드량 전달 (텍스트)
+            getGold_HudText.transform.GetChild(0).GetComponent<GetGold_HudText>().ShowGetGoldText(25); // 허드 텍스트가 표시 할 골드량 전달 (그림자)
+            getGold_HudText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<GetGoldHudText_Shadow>().ShowGetGoldText(25); // 허드 텍스트가 표시 할 골드량 전달 (텍스트)
 
             cc.enabled = false; // 다시 트리거 비활성화
 

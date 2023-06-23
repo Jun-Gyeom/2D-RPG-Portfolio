@@ -26,7 +26,8 @@ public class Arrow : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") && !GameManager.instance.isDie)
         {
             // 피격
-            Debug.Log("화살에 맞음");
+            GameManager.instance.failCause = "궁수 스켈레톤에게 패배"; // 사망 이유
+
             skel.attackPos = transform;
             collision.GetComponent<PlayerManager>().TakeDamage(skel.attackDamage, skel.attackPos, false); // 마지막 인수 = 몬스터는 크리티컬 공격 없음
 

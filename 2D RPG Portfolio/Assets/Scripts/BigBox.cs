@@ -27,6 +27,9 @@ public class BigBox : EntityManager
         GameObject boxPiece = ObjectPoolingManager.instance.GetObject("Object_BigBoxPiece");
         boxPiece.transform.position = transform.position;
 
+        // 파괴 효과음 재생
+        SoundManager.instance.PlaySound("BreakBox");
+
         DropItem(); // 아이템 드롭
     }
 
@@ -53,6 +56,16 @@ public class BigBox : EntityManager
                 GameObject bullion = ObjectPoolingManager.instance.GetObject("Item_Bullion"); // 오브젝트 풀에서 금괴 대여
                 bullion.transform.position = this.transform.position; // 위치 초기화
             }
+        }
+
+        // 페어리 드롭
+        float rand_ItemClass = Random.Range(0f, 1f);
+
+        if (rand_ItemClass < 0.1f) // (10%) 
+        {
+            Debug.Log("페어리 발견!");
+            GameObject fairy = ObjectPoolingManager.instance.GetObject("Item_FairyS");
+            fairy.transform.position = transform.transform.position;
         }
     }
 }
