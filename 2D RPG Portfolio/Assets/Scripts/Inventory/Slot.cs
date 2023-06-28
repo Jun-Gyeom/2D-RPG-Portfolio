@@ -12,8 +12,6 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public bool isEquipmentSlot; // 해당 슬롯이 장비 장착 슬롯인지 여부
     public bool isDeathMenuUISlot; // 해당 슬롯이 사망 정보 창 슬롯인지 여부
-    public Transform playerTr; // 플레이어 위치
-    public PlayerManager pm; // 플레이어 매니저
 
     // 드래그 앤 드롭
     [SerializeField]
@@ -21,9 +19,6 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     private void Awake()
     {
-        pm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
-        playerTr = GameObject.FindGameObjectWithTag("Player").transform;
-
         // 이동 대상 UI를 지정하지 않은 경우, 자동으로 자신으로 초기화
         if (_targetTr == null)
         {
@@ -80,13 +75,13 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     // 아이템 장착
     private void EquipItem()
     {
-        Debug.Log($"장착 전 체력: {pm.health} " +
+        Debug.Log($"장착 전 체력: {PlayerManager.instance.health} " +
             $"\n장착 전 최대체력: {GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth} " +
-            $"\n 장착 후 체력: {Mathf.Round((pm.health * (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth + item.increase_Health)) / (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth))} " +
+            $"\n 장착 후 체력: {Mathf.Round((PlayerManager.instance.health * (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth + item.increase_Health)) / (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth))} " +
             $"\n 장착 후 최대체력: {(GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth + item.increase_Health)}");
 
         // 아이템 장착 후 체력 구하기
-        pm.health = Mathf.Round((pm.health * (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth + item.increase_Health))
+        PlayerManager.instance.health = Mathf.Round((PlayerManager.instance.health * (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth + item.increase_Health))
             / (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth));
 
         GameManager.instance.increased_MaxHealth += item.increase_Health; // 최대 체력 적용
@@ -95,7 +90,7 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         GameManager.instance.increased_CriticalValue += item.increase_CriticalValue; // 치명타 계수 적용
         GameManager.instance.increased_MoveSpeed += item.increase_MoveSpeed; // 이동 속도 적용
         GameManager.instance.increased_MaxDashCount += item.increase_DashCount; // 대쉬 횟수 적용
-        pm.dashChargeCount += item.increase_DashCount; // 대쉬 횟수 증가하면서 대쉬 충전량도 같이 증가
+        PlayerManager.instance.dashChargeCount += item.increase_DashCount; // 대쉬 횟수 증가하면서 대쉬 충전량도 같이 증가
         GameManager.instance.increased_JumpPower += item.increase_JumpPower; // 점프력 적용
         GameManager.instance.increased_MaxJump += item.increase_JumpCount; // 점프 횟수 적용
     }
@@ -103,13 +98,13 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     // 아이템 장착 해제
     private void UnequipItem()
     {
-        Debug.Log($"해제 전 체력: {pm.health} " +
+        Debug.Log($"해제 전 체력: {PlayerManager.instance.health} " +
             $"\n해제 전 최대체력: {GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth} " +
-            $"\n 해제 후 체력: {Mathf.Round((pm.health * (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth - item.increase_Health)) / (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth))} " +
+            $"\n 해제 후 체력: {Mathf.Round((PlayerManager.instance.health * (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth - item.increase_Health)) / (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth))} " +
             $"\n 해제 후 최대체력: {(GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth - item.increase_Health)}");
 
         // 아이템 장착 해제 후 체력 구하기
-        pm.health = Mathf.Round((pm.health * (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth - item.increase_Health))
+        PlayerManager.instance.health = Mathf.Round((PlayerManager.instance.health * (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth - item.increase_Health))
             / (GameManager.instance.player_MaxHealth[GameManager.instance.level] + GameManager.instance.increased_MaxHealth));
 
         GameManager.instance.increased_MaxHealth -= item.increase_Health; // 최대 체력 적용
@@ -161,7 +156,7 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                 Debug.Log("아이템 버림");
                 DragSlot.instance.dragSlot.ClearSlot(); // 아이템 버림
 
-                throwItem.transform.position = playerTr.position; // 플레이어 위치로 이동
+                throwItem.transform.position = GameManager.instance.player.transform.position; // 플레이어 위치로 이동
             }
 
             DragSlot.instance.SetColor(0); // 드래그 슬롯 안 보이게

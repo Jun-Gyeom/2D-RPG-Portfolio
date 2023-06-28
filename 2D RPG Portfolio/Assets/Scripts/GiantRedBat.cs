@@ -165,6 +165,14 @@ public class GiantRedBat : MonsterManager
 
         anim.SetTrigger("Die"); // 죽는 애니메이션
         hp_Bar.gameObject.SetActive(false); // HP 바 비활성화
+
+        // 모든 파이어볼 오브젝트 풀에 반납
+        for (int i = 0; i < fb.Length; i++)
+        {
+            fb[i].gameObject.SetActive(false);
+        }
+
+        StopAllCoroutines(); // 모든 코루틴 정지
     }
 
     // 아이템 드롭

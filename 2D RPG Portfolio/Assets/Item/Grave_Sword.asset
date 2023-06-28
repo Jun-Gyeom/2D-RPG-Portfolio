@@ -15,13 +15,14 @@ MonoBehaviour:
   itemName: "\uADF8\uB808\uC774\uBE0C \uC18C\uB4DC"
   itemDescription: "\"\uBAA8\uD5D8\uAC00\uB77C\uBA74 \uD55C\uBC88\uCBE4\uC740 \uC0AC\uC6A9\uD574\uBD24\uC744
     \uBC14\uB85C \uADF8 \uAC80\""
+  itemClass: 0
   itemImage: {fileID: 21300000, guid: db4608068656c774cb0842bce066e83f, type: 3}
   objectPoolName: EquipItem_GraveSword
   increase_Health: 0
   increase_CriticalPercentage: 0
   increase_CriticalValue: 0
   increase_MoveSpeed: 0
-  increase_Damage: 3
+  increase_Damage: 2
   increase_JumpPower: 0
   increase_DashCount: 0
   increase_JumpCount: 0

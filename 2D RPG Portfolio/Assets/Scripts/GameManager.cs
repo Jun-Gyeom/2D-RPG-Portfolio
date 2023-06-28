@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // 싱글톤을 할당할 전역변수
     public Portal pt; // 포탈 스크립트
-    public PlayerManager pm; // 플레이어 매니저 스크립트
     public Inventory iv; // 인벤토리 스크립트
     public TownShop town_Shop; // 마을 상점 스크립트
     public DungeonShop dungeon_Shop; // 던전 상점 스크립트
@@ -18,11 +17,9 @@ public class GameManager : MonoBehaviour
 
     public bool isDropFairy; // 현재 스테이지에 페어리를 소환했는지 체크
 
-    public ParticleSystem footDustParticle; // 플레이어가 이동할 때 흩날리는 먼지 파티클
-    public ParticleSystem doubleJumpParticle; // 플레이어가 2단 점프할 때 나오는 파티클
+    public GameObject player_Prefab; // 플레이어 프리팹
 
-    private GameObject player; // DontDestroy에 등록할 플레이어 오브젝트
-    private GameObject canvas; // DontDestroy에 등록할 캔버스 오브젝트
+    public GameObject player; // DontDestroy에 등록할 캔버스 오브젝트
 
     private GameObject[] monsterInStage; // 현재 스테이지에 있는 몬스터 배열
     public List<GameObject> monsterInStageList; // 현재 스테이지에 있는 몬스터 리스트
@@ -32,12 +29,20 @@ public class GameManager : MonoBehaviour
 
     public string playerLocation; // 플레이어의 위치
     public int currentDungeonFloor; // 현재 던전 층
-    public float playTime; // 던전에 머문 시간
+    public int highDungeonFloor; // 도달한 층
+    public float playTime; // 게임 플레이 시간
+    public float playDungeonTime; // 던전에 머문 시간
+    public float saveTime; // 자동 저장 시점
+
+    public bool isInGame; // 인게임인지 체크
 
     // UI 관련
-    private GameObject goldTextObject; // 보유한 골드량 텍스트 오브젝트 (좌측 상단)
+    public GameObject hud_CanvasObject; // HUD 캔버스 오브젝트
+
     public TMP_Text goldText; // 보유한 골드량 텍스트 (좌측 상단)
 
+    public GameObject mainMenuPanel; // 메인메뉴 창 오브젝트
+    public GameObject dataSlotSelectPanel; // 메인메뉴 데이터 슬롯 선택 패널 오브젝트
     public GameObject invectoryPanel; // 인벤토리 오브젝트
     public GameObject tooltipObject; // 툴팁 오브젝트
     public GameObject deathMenu; // 죽음 메뉴 오브젝트
@@ -64,6 +69,20 @@ public class GameManager : MonoBehaviour
     public TMP_Text enemyText; // 일시정지 메뉴 남은 적 텍스트
 
     public GameObject mouseCursor; // 마우스 커서 오브젝트
+
+    // 대쉬 게이지 관련
+    public GameObject dashGauge1; // 대쉬 게이지 첫 번째 칸
+    public GameObject dashGauge2; // 대쉬 게이지 두 번째 칸
+    public GameObject dashGauge3; // 대쉬 게이지 세 번째 칸
+    public GameObject dashGauge4; // 대쉬 게이지 네 번째 칸
+    public GameObject dashGauge5; // 대쉬 게이지 다섯 번째 칸
+    public GameObject dashGauge6; // 대쉬 게이지 여섯 번째 칸
+
+    public GameObject dashFrame3; // 대쉬 세 번째 프레임
+    public GameObject dashFrame4; // 대쉬 네 번째 프레임
+    public GameObject dashFrame5; // 대쉬 다섯 번째 프레임
+    public GameObject dashFrame6; // 대쉬 여섯 번째 프레임
+    public GameObject gaugeLastFrame; // 대쉬 게이지 프레임 닫기
 
     // 사망 정보창 관련
     public TMP_Text deathMenu_TimeText; // 시간 텍스트
@@ -104,7 +123,6 @@ public class GameManager : MonoBehaviour
     public TMP_Text resolutionText; // 현재 해상도 텍스트
 
     // 아이템 툴팁 관련
-    private CanvasScaler canvasScaler; // 캔버스 스케일러
     public RectTransform tooltip_rt; // 툴팁 렉트 트랜스폼
 
     public TMP_Text tooltip_ItemName; // 툴팁 아이템 이름
@@ -153,6 +171,9 @@ public class GameManager : MonoBehaviour
 
     public string failCause; // 탐험 실패 이유
 
+    public bool tutorial_Complete; // 튜토리얼 완료 여부
+    public bool isTutorial; // 현재 튜토리얼 진행 중인지 여부
+
 
     // 플레이어 능력치
 
@@ -195,20 +216,10 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager가 삭제되지 않음
 
+        DontDestroyOnLoad(hud_CanvasObject); // HUD 캔버스 DontDestroy 씬으로 이동
+
         // 이벤트 등록
         SceneManager.sceneLoaded += LoadedsceneEvent;
-
-        // Find 함수로 찾아서 할당
-        player = GameObject.FindGameObjectWithTag("Player");
-        canvas = GameObject.Find("HUD_Canvas");
-        goldTextObject = GameObject.Find("Gold_Text");
-
-        // 컴포넌트 할당
-        goldText = goldTextObject.GetComponent<TextMeshProUGUI>();
-        canvasScaler = canvas.GetComponent<CanvasScaler>();
-
-        DontDestroyOnLoad(player); // 씬 전환 시에도 플레이어가 삭제되지 않음
-        DontDestroyOnLoad(canvas); // 씬 전환 시에도 캔버스가 삭제되지 않음
 
         randomStageSceneList = stageSceneList.ToList(); // 던전 씬 이름 리스트 초기화
 
@@ -218,6 +229,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         invectoryPanel.SetActive(false); // 인벤토리 패널 닫기
+
+        // 초기화 씬에서 메인메뉴 씬으로 이동
+        SceneManager.LoadScene(1);
     }
 
     void Update()
@@ -229,6 +243,13 @@ public class GameManager : MonoBehaviour
         goldText.text = string.Format("{0:n0} G", lerpGold); // 좌측 상단
         escGoldText.text = string.Format("{0:n0} G", lerpGold); ; // 마을 일시정지 메뉴
         townEscGoldText.text = string.Format("{0:n0} G", lerpGold); ; // 일시정지 메뉴
+
+        // Esc 키를 눌렀을 때 설정 메뉴가 열려있었다면
+        if (Input.GetKeyDown(KeyCode.Escape) && optionMenuPanel.activeSelf)
+        {
+            // 설정 메뉴 닫기
+            optionMenuPanel.SetActive(false);
+        }
 
         // 씬을 불러와야 할 떄
         if (canSceneLoad)
@@ -252,82 +273,94 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        // 마을에 있으면 1분에 한번씩 자동 저장
+        if (playerLocation == "마을" && playTime > saveTime)
+        {
+            // 다음 저장 시점 설정
+            saveTime = playTime;
+            saveTime += 15f;
+
+            Save(); // 저장
+        }
+
+        // 게임 플레이 시간 업데이트
+        if (isInGame)
+        {
+            playTime += Time.deltaTime;
+        }
+
         // 던전에 머문 시간 업데이트
         if (playerLocation == "던전" && !isDie) // 던전에 있고 죽지 않았을 때
         {
-            playTime += Time.deltaTime;
-            playtimeText.text = (playTime / 60).ToString("00") + "분 " + (playTime % 60).ToString("00") + "초";
+            playDungeonTime += Time.deltaTime;
+            playtimeText.text = (playDungeonTime / 60).ToString("00") + "분 " + (playDungeonTime % 60).ToString("00") + "초";
         }
 
-        // 포탈 매니저가 할당되지 않았다면
-        if (pt == null)
+        // 포탈 매니저가 할당되어있고
+        if (pt != null)
         {
-            pt = GameObject.Find("Portal").GetComponent<Portal>(); // 포탈 할당
-
-            StageMonsterCheck(); // 게임매니저의 스테이지 몬스터 체크 함수 실행
-        }
-
-        // 스테이지에 모든 몬스터를 처리했다면
-        if (monsterInStageList.Count == 0)
-        {
-            // 포탈 개방
-            pt.isPortalOpen = true;
-
-            // 남은 적 텍스트 업데이트
-            enemyText.text = "없음";
-
-            // 페어리 생성
-            if (!isDropFairy && fairySpawnPoint != null)
+            // 스테이지에 모든 몬스터를 처리했다면
+            if (monsterInStageList.Count == 0)
             {
-                isDropFairy = true; // 페어리 생성 처리
+                // 포탈 개방
+                pt.isPortalOpen = true;
 
-                float rand_FairySize = Random.Range(0f, 1f);
+                // 남은 적 텍스트 업데이트
+                enemyText.text = "없음";
 
-                if (rand_FairySize < 0.20f) // None (20%) 
+                // 페어리 생성
+                if (!isDropFairy && fairySpawnPoint != null)
                 {
-                    Debug.Log("Not Fairy");
-                }
-                else if (rand_FairySize < 0.65f) // M (45%) 
-                {
-                    Debug.Log("Fairy M");
-                    GameObject fairy = ObjectPoolingManager.instance.GetObject("Item_FairyM");
-                    fairy.transform.position = fairySpawnPoint.transform.position;
+                    isDropFairy = true; // 페어리 생성 처리
 
-                    // 페어리 생성 효과음 재생
-                    SoundManager.instance.PlaySound("SpawnFairy");
-                }
-                else if (rand_FairySize < 0.95f) // L (30%) 
-                {
-                    Debug.Log("Fairy L");
-                    GameObject fairy = ObjectPoolingManager.instance.GetObject("Item_FairyL");
-                    fairy.transform.position = fairySpawnPoint.transform.position;
+                    float rand_FairySize = Random.Range(0f, 1f);
 
-                    // 페어리 생성 효과음 재생
-                    SoundManager.instance.PlaySound("SpawnFairy");
-                }
-                else if (rand_FairySize < 1.0f) // XL (5%) 
-                {
-                    Debug.Log("Fairy XL");
-                    GameObject fairy = ObjectPoolingManager.instance.GetObject("Item_FairyXL");
-                    fairy.transform.position = fairySpawnPoint.transform.position;
+                    if (rand_FairySize < 0.30f) // None (30%) 
+                    {
+                        Debug.Log("Not Fairy");
+                    }
+                    else if (rand_FairySize < 0.70f) // M (40%) 
+                    {
+                        Debug.Log("Fairy M");
+                        GameObject fairy = ObjectPoolingManager.instance.GetObject("Item_FairyM");
+                        fairy.transform.position = fairySpawnPoint.transform.position;
 
-                    // 페어리 생성 효과음 재생
-                    SoundManager.instance.PlaySound("SpawnFairy");
+                        // 페어리 생성 효과음 재생
+                        SoundManager.instance.PlaySound("SpawnFairy");
+                    }
+                    else if (rand_FairySize < 0.95f) // L (25%) 
+                    {
+                        Debug.Log("Fairy L");
+                        GameObject fairy = ObjectPoolingManager.instance.GetObject("Item_FairyL");
+                        fairy.transform.position = fairySpawnPoint.transform.position;
+
+                        // 페어리 생성 효과음 재생
+                        SoundManager.instance.PlaySound("SpawnFairy");
+                    }
+                    else if (rand_FairySize < 1.0f) // XL (5%) 
+                    {
+                        Debug.Log("Fairy XL");
+                        GameObject fairy = ObjectPoolingManager.instance.GetObject("Item_FairyXL");
+                        fairy.transform.position = fairySpawnPoint.transform.position;
+
+                        // 페어리 생성 효과음 재생
+                        SoundManager.instance.PlaySound("SpawnFairy");
+                    }
                 }
             }
-        }
-        // 스테이지에 몬스터가 남아있다면
-        else
-        {
-            // 포탈 미개방
-            pt.isPortalOpen = false;
+            // 스테이지에 몬스터가 남아있다면
+            else
+            {
+                // 포탈 미개방
+                pt.isPortalOpen = false;
 
-            // 남은 적 텍스트 업데이트
-            enemyText.text = monsterInStageList.Count.ToString();
+                // 남은 적 텍스트 업데이트
+                enemyText.text = monsterInStageList.Count.ToString();
+            }
         }
 
-        // 메뉴 또는 인벤토리가 활성화 되어있거나 탐험실패, 탐험성공 패널이 활성화 되어있거나 대화 선택 중이라면
-        if (activeInventoty || activeEscMenu || choicePanel.activeSelf || deathMenu.activeSelf)
+        // 메인메뉴 씬이거나 메뉴 또는 인벤토리가 활성화 되어있거나 탐험실패, 탐험성공 패널이 활성화 되어있거나 대화 선택 중이라면
+        if (SceneManager.GetActiveScene().name == "Main" || activeInventoty || activeEscMenu || choicePanel.activeSelf || deathMenu.activeSelf)
         {
             mouseCursor.SetActive(true); // 커서 숨김 해제
             Cursor.lockState = CursorLockMode.None; // 커서 고정 해제
@@ -346,19 +379,88 @@ public class GameManager : MonoBehaviour
         // 플레이어 현재 위치 설정
         switch (scene.buildIndex)
         {
-            case 0: // 튜토리얼 씬 번호 : 0
-                playerLocation = "튜토리얼";
-                locationText.text = playerLocation; // 일시정지 메뉴 현재 위치 텍스트 업데이트
+            case 1: // 메인 씬 번호 : 1
+                SoundManager.instance.PlayBackgroundMusic("MainMenu"); // 메인메뉴 BGM 재생
+                mainMenuPanel.SetActive(true); // 메인메뉴 활성화
+
+                isInGame = false; // 인게임 아님
+
+                // 플레이어 삭제
+                Destroy(player);
                 break;
 
-            case 1: // 마을 씬 번호 : 1
-                playerLocation = "마을";
-                player.transform.position = new Vector3(-20, -1, 0); // 플레이어 위치
-                playTime = 0; // 던전에 머문 시간 초기화
+            case 2: // 튜토리얼 씬 번호 : 2
+                isInGame = true; // 인게임
+
+                mainMenuPanel.SetActive(false); // 메인메뉴 비활성화
+                dataSlotSelectPanel.SetActive(false); // 데이터 슬롯 선택 패널 비활성화
+
+                // 플레이어가 할당되지 않았다면
+                if (player == null)
+                {
+                    // 플레이어 생성
+                    player = Instantiate(player_Prefab);
+                }
+
+                isTutorial = true; // 튜토리얼 진행 중임
+
+                playerLocation = "튜토리얼";
                 townLocationText.text = playerLocation; // 마을 일시정지 메뉴 현재 위치 텍스트 업데이트
+
+                player.transform.position = new Vector3(-32f, 4.5f, 0); // 플레이어 위치
+
+                // 체력 초기화
+                PlayerManager.instance.health = player_MaxHealth[level];
+
+                // 포탈 매니저가 할당되지 않았다면
+                if (pt == null)
+                {
+                    pt = GameObject.Find("Portal").GetComponent<Portal>(); // 포탈 할당
+
+                    StageMonsterCheck(); // 게임매니저의 스테이지 몬스터 체크 함수 실행
+                }
+
+                SoundManager.instance.PlayBackgroundMusic("Cave"); // 튜토리얼 BGM 재생
+
+                break;
+
+            case 3: // 마을 씬 번호 : 3
+                playerLocation = "마을";
+
+                playDungeonTime = 0; // 던전에 머문 시간 초기화
+                townLocationText.text = playerLocation; // 마을 일시정지 메뉴 현재 위치 텍스트 업데이트
+
+                isInGame = true; // 인게임
+                isTutorial = false; // 튜토리얼 끝남
+
+                mainMenuPanel.SetActive(false); // 메인메뉴 비활성화
+                dataSlotSelectPanel.SetActive(false); // 데이터 슬롯 선택 패널 비활성화
+
+                // 플레이어가 할당되지 않았다면
+                if (player == null)
+                {
+                    // 플레이어 생성
+                    player = Instantiate(player_Prefab);
+                }
+
+                player.transform.position = new Vector3(-20, -1, 0); // 플레이어 위치
 
                 deathMenu.SetActive(false); // 게임 클리어 창 비활성화
                 adventureClearPanel.SetActive(false); // 탐험 성공 패널 비활성화
+
+                // 만약 이번 던전에서 도달한 층 수가 최대로 도달한 층 수보다 크다면
+                if (currentDungeonFloor > highDungeonFloor)
+                {
+                    highDungeonFloor = currentDungeonFloor; // 도달한 층 기록 갱신
+                }
+
+                // 포탈 매니저가 할당되지 않았다면
+                if (pt == null)
+                {
+                    pt = GameObject.Find("Portal").GetComponent<Portal>(); // 포탈 할당
+
+                    StageMonsterCheck(); // 게임매니저의 스테이지 몬스터 체크 함수 실행
+                }
 
                 // 죽어서 온 것이라면
                 if (isDie)
@@ -397,11 +499,11 @@ public class GameManager : MonoBehaviour
 
                     // 플레이어 부활 처리
                     isDie = false;
-                    pm.anim.SetBool("isDeath", false);
+                    PlayerManager.instance.anim.SetBool("isDeath", false);
                 }
 
                 // 체력 초기화
-                pm.health = player_MaxHealth[level];
+                PlayerManager.instance.health = player_MaxHealth[level];
 
                 // 던전 씬 리스트 초기화
                 randomStageSceneList = stageSceneList.ToList(); // 던전 씬 이름 리스트 초기화
@@ -411,13 +513,23 @@ public class GameManager : MonoBehaviour
                 dungeon_Shop.RandomRestock(); // 던전 상점 랜덤 재입고
 
                 SoundManager.instance.PlayBackgroundMusic("Town"); // 마을 BGM 재생
+
+                Save(); // 저장
                 break;
 
-            case >= 2: // 던전 씬 번호 : 2이상
+            case >= 4: // 던전 씬 번호 : 4이상
                 playerLocation = "던전";
                 player.transform.position = new Vector3(0, 0, 0); // 플레이어 위치
                 locationText.text = $"{playerLocation} {currentDungeonFloor}층"; // 일시정지 메뉴 현재 위치 텍스트 업데이트
                 isDropFairy = false; // 페어리 생성되지 않음
+
+                // 포탈 매니저가 할당되지 않았다면
+                if (pt == null)
+                {
+                    pt = GameObject.Find("Portal").GetComponent<Portal>(); // 포탈 할당
+
+                    StageMonsterCheck(); // 게임매니저의 스테이지 몬스터 체크 함수 실행
+                }
 
                 // 만약 현재 씬이 보스 씬이라면
                 if (SceneManager.GetActiveScene().name == "DungeonBoss")
@@ -474,6 +586,19 @@ public class GameManager : MonoBehaviour
 
             // 포탈 ID가 1일 때 (마을로 가는 포탈)
             case 1:
+                tutorial_Complete = true; // 튜토리얼 완료
+
+                // 인벤토리 비우기
+                for (int i = 0; i < iv.slots.Length; i++)
+                {
+                    // 슬롯에 아이템이 있다면
+                    if (iv.slots[i].item != null)
+                    {
+                        // 비우기
+                        iv.slots[i].ClearSlot();
+                    }
+                }
+
                 SetLoadScene("Town"); // 마을로 이동
                 break;
 
@@ -487,7 +612,7 @@ public class GameManager : MonoBehaviour
                 invectoryPanel.SetActive(activeInventoty);
 
                 // 게임 클리어 창 정보 업데이트
-                deathMenu_TimeText.text = (playTime / 60).ToString("00") + "분 " + (playTime % 60).ToString("00") + "초"; // 시간
+                deathMenu_TimeText.text = (playDungeonTime / 60).ToString("00") + "분 " + (playDungeonTime % 60).ToString("00") + "초"; // 시간
                 deathMenu_LocationText.text = string.Format("{0} {1}층", playerLocation, currentDungeonFloor); // 위치
                 deathMenu_GoldText.text = string.Format("{0:n0} G", gold); // 소지금
                 goldPenaltyText.SetActive(false); // 패널티 없음
@@ -619,8 +744,8 @@ public class GameManager : MonoBehaviour
 
         tooltipObject.transform.position = transform.position; // 툴팁 위치를 슬롯 위치로 변경
 
-        float halfWidth = canvasScaler.referenceResolution.x * 0.5f;
-        float halfHeight = canvasScaler.referenceResolution.y * 0.5f;
+        float halfWidth = hud_CanvasObject.GetComponent<CanvasScaler>().referenceResolution.x * 0.5f;
+        float halfHeight = hud_CanvasObject.GetComponent<CanvasScaler>().referenceResolution.y * 0.5f;
 
         // 툴팁이 화면 밖으로 나갈 시 티벗 변경 ( 툴팁의 포지션과 길이, 캔버스 스케일러를 이용해 인벤토리가 잘렸는지 계산 )
         if ((tooltip_rt.anchoredPosition.y - tooltip_rt.sizeDelta.y < -halfHeight)
@@ -800,6 +925,11 @@ public class GameManager : MonoBehaviour
             townEscMenuPanel.SetActive(activeEscMenu);
         }
 
+        uiTooltipObject.SetActive(false); // UI 툴팁 닫기
+
+        // 일시정지 해제
+        Time.timeScale = 1f;
+
         // 인벤토리 열림 사운드
         SoundManager.instance.PlaySound("OpenInventory");
 
@@ -843,7 +973,7 @@ public class GameManager : MonoBehaviour
 
         failCause = "용사는 무기를 버리고 \n던전에서 도망쳤다!";
         // 플레이어 사망 처리
-        pm.Die();
+        PlayerManager.instance.Die();
     }
 
     public void EscapeNo() // 되묻는 창에서 '아니요'를 눌렀을 때 실행할 함수
@@ -870,7 +1000,22 @@ public class GameManager : MonoBehaviour
         // 버튼 클릭 사운드
         SoundManager.instance.PlaySound("ButtonClick");
 
+        // 되묻는 창 닫기
+        realyGoMainPanel.SetActive(false);
+
+        // 일시정지 메뉴 닫기
+        activeEscMenu = false;
+        escMenuPanel.SetActive(activeEscMenu); // 던전 일시정지 메뉴
+        townEscMenuPanel.SetActive(activeEscMenu); // 마을 일시정지 메뉴
+
+        // 일시정지 해제
+        Time.timeScale = 1f;
+
+        // BGM 끔
+        SoundManager.instance.StopBackgroundMusic();
+
         // 화면 어두워지며 메인으로 이동
+        SetLoadScene("Main"); // 메인으로 이동
     }
 
     public void GoMainNo() // 되묻는 창에서 '아니요'를 눌렀을 때 실행할 함수
@@ -983,6 +1128,33 @@ public class GameManager : MonoBehaviour
         Screen.SetResolution(resolutionList[resolutionPage].width, resolutionList[resolutionPage].height, displayModeList[displayModePage]); // 화면 설정 적용
     }
 
+    // 게임 시작
+    public void GameStart()
+    {
+        // 버튼 클릭 사운드
+        SoundManager.instance.PlaySound("ButtonClick");
+
+        dataSlotSelectPanel.SetActive(true); // 데이터 슬롯 선택 패널 띄우기
+    }
+
+    // 게임 종료
+    public void QuitGame()
+    {
+        // 버튼 클릭 사운드
+        SoundManager.instance.PlaySound("ButtonClick");
+
+        Application.Quit(); // 종료
+    }
+
+    // 데이터 슬롯 선택 화면 닫기
+    public void CloseSelectDataSlotMenu()
+    {
+        // 버튼 클릭 사운드
+        SoundManager.instance.PlaySound("ButtonClick");
+
+        dataSlotSelectPanel.SetActive(false); // 데이터 슬롯 선택 패널 닫기
+    }
+
     // 페이드 인
     IEnumerator FadeIn()
     {
@@ -1061,5 +1233,29 @@ public class GameManager : MonoBehaviour
 
         // 페이드 인
         StartCoroutine("FadeIn");
+    }
+
+    // 저장
+    public void Save()
+    {
+        DataManager.instance.nowPlayer.tutorial_Complete = tutorial_Complete; // 튜토리얼 완료 여부
+        DataManager.instance.nowPlayer.gold = gold; // 소지금
+        DataManager.instance.nowPlayer.exp = exp; // 경험치
+        DataManager.instance.nowPlayer.level = level; // 레벨
+        DataManager.instance.nowPlayer.highFloor = highDungeonFloor; // 도달한 층
+        DataManager.instance.nowPlayer.playTime = playTime; // 플레이 시간
+
+        DataManager.instance.SaveData();
+    }
+
+    // 데이터 적용
+    public void ApplyData()
+    {
+        tutorial_Complete = DataManager.instance.nowPlayer.tutorial_Complete; // 튜토리얼 완료 여부
+        gold = DataManager.instance.nowPlayer.gold; // 소지금
+        exp = DataManager.instance.nowPlayer.exp; // 경험치
+        level = DataManager.instance.nowPlayer.level; // 레벨
+        highDungeonFloor = DataManager.instance.nowPlayer.highFloor; // 도달한 층
+        playTime = DataManager.instance.nowPlayer.playTime; // 플레이 시간
     }
 }

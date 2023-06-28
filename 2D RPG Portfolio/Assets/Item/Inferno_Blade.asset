@@ -22,7 +22,7 @@ MonoBehaviour:
   increase_CriticalPercentage: 0.05
   increase_CriticalValue: 0
   increase_MoveSpeed: 0
-  increase_Damage: 5
+  increase_Damage: 3
   increase_JumpPower: 0
   increase_DashCount: 0
   increase_JumpCount: 0

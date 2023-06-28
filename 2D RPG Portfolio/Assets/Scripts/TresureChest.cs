@@ -63,17 +63,17 @@ public class TresureChest : MonoBehaviour
 
         float rand_ItemClass = Random.Range(0f, 1f);
 
-        if (rand_ItemClass < 0.6f) // (60%) 
+        if (rand_ItemClass < 0.55f) // (55%) 
         {
             Debug.Log("일반 등급");
             targetList = common_ItemList; // 타겟 리스트에 일반 등급 대입
         }
-        else if (rand_ItemClass < 0.95f) // 레어 (35%) 
+        else if (rand_ItemClass < 0.90f) // 레어 (35%) 
         {
             Debug.Log("레어 등급");
             targetList = rare_ItemList; // 타겟 리스트에 레어 등급 대입
         }
-        else if (rand_ItemClass < 1.0f) // 에픽 (5%) 
+        else if (rand_ItemClass < 1.0f) // 에픽 (10%) 
         {
             Debug.Log("에픽 등급");
             targetList = epic_ItemList; // 타겟 리스트에 에픽 등급 대입

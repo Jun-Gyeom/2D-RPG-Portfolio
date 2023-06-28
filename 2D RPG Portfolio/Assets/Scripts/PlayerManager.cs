@@ -6,6 +6,8 @@ using TMPro;
 
 public class PlayerManager : EntityManager
 {
+    public static PlayerManager instance; // 싱글톤을 할당할 전역변수
+
     Rigidbody2D rb;
     public Animator anim;
 
@@ -24,6 +26,9 @@ public class PlayerManager : EntityManager
     public int dashChargeCount; // 대쉬 충전량
     private float timer_Dash; // 대쉬 타이머
 
+    public ParticleSystem footDustParticle; // 이동할 때 흩날리는 먼지 파티클
+    public ParticleSystem doubleJumpParticle; // 2단 점프할 때 나오는 파티클
+
     // UI 관련
     public GameObject hp_Bar; // HP 바 게임오브젝트
     public GameObject hp_fill_GameObject; // HP 바 fill 영역 게임오브젝트
@@ -41,19 +46,6 @@ public class PlayerManager : EntityManager
     public TMP_Text expText; // EXP를 나타내는 텍스트
     public TMP_Text levelText; // LV을 나타내는 텍스트
 
-    public GameObject dashGauge1; // 대쉬 게이지 첫 번째 칸
-    public GameObject dashGauge2; // 대쉬 게이지 두 번째 칸
-    public GameObject dashGauge3; // 대쉬 게이지 세 번째 칸
-    public GameObject dashGauge4; // 대쉬 게이지 네 번째 칸
-    public GameObject dashGauge5; // 대쉬 게이지 다섯 번째 칸
-    public GameObject dashGauge6; // 대쉬 게이지 여섯 번째 칸
-
-    public GameObject dashFrame3; // 대쉬 세 번째 프레임
-    public GameObject dashFrame4; // 대쉬 네 번째 프레임
-    public GameObject dashFrame5; // 대쉬 다섯 번째 프레임
-    public GameObject dashFrame6; // 대쉬 여섯 번째 프레임
-    public GameObject gaugeLastFrame; // 대쉬 게이지 프레임 닫기
-
     Transform attackPos; // 공격받았을 때 상대가 공격한 위치
 
     Image damageScreen; // 피격 시 화면 가장자리 붉어짐 이미지
@@ -66,6 +58,24 @@ public class PlayerManager : EntityManager
 
     // Wall 체크 레이캐스트
     private float wallCastMaxDistance = 0.5f;
+
+    // 싱글톤 패턴
+    private void Awake()
+    {
+        // 싱글톤 변수가 비어있으면
+        if (instance == null)
+        {
+            // 자신을 할당
+            instance = this;
+        }
+        // 싱글톤 변수가 비어있지 않으면
+        else
+        {
+            // 자신을 파괴
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject); // 씬 전환 시에도 PlayerManager가 삭제되지 않음
+    }
 
     void Start()
     {
@@ -95,21 +105,6 @@ public class PlayerManager : EntityManager
         hpText = GameObject.Find("Hp_Text").GetComponent<TextMeshProUGUI>(); // HP 텍스트
         expText = GameObject.Find("Exp_Text").GetComponent<TextMeshProUGUI>(); // EXP 텍스트
         levelText = GameObject.Find("Level_Text").GetComponent<TextMeshProUGUI>(); // LV 텍스트
-
-        // 대쉬 게이지 할당
-        dashGauge1 = GameObject.Find("Gauge 1");
-        dashGauge2 = GameObject.Find("Gauge 2");
-        dashGauge3 = GameObject.Find("Gauge 3");
-        dashGauge4 = GameObject.Find("Gauge 4");
-        dashGauge5 = GameObject.Find("Gauge 5");
-        dashGauge6 = GameObject.Find("Gauge 6");
-
-        dashFrame3 = GameObject.Find("Gauge Frame 3");
-        dashFrame4 = GameObject.Find("Gauge Frame 4");
-        dashFrame5 = GameObject.Find("Gauge Frame 5");
-        dashFrame6 = GameObject.Find("Gauge Frame 6");
-
-        gaugeLastFrame = GameObject.Find("Gauge Last Frame");
 
         // 대미지 스크린 할당
         damageScreen = GameObject.Find("DamageScreen").GetComponent<Image>();
@@ -177,96 +172,96 @@ public class PlayerManager : EntityManager
         }
 
         // 대쉬 게이지
-        dashGauge1.SetActive(false);
-        dashGauge2.SetActive(false);
-        dashGauge3.SetActive(false);
-        dashGauge4.SetActive(false);
-        dashGauge5.SetActive(false);
-        dashGauge6.SetActive(false);
+        GameManager.instance.dashGauge1.SetActive(false);
+        GameManager.instance.dashGauge2.SetActive(false);
+        GameManager.instance.dashGauge3.SetActive(false);
+        GameManager.instance.dashGauge4.SetActive(false);
+        GameManager.instance.dashGauge5.SetActive(false);
+        GameManager.instance.dashGauge6.SetActive(false);
 
         switch (dashChargeCount)
         {
             case 1:
-                dashGauge1.SetActive(true);
+                GameManager.instance.dashGauge1.SetActive(true);
                 break;
             case 2:
-                dashGauge1.SetActive(true);
-                dashGauge2.SetActive(true);
+                GameManager.instance.dashGauge1.SetActive(true);
+                GameManager.instance.dashGauge2.SetActive(true);
                 break;
             case 3:
-                dashGauge1.SetActive(true);
-                dashGauge2.SetActive(true);
-                dashGauge3.SetActive(true);
+                GameManager.instance.dashGauge1.SetActive(true);
+                GameManager.instance.dashGauge2.SetActive(true);
+                GameManager.instance.dashGauge3.SetActive(true);
                 break;
             case 4:
-                dashGauge1.SetActive(true);
-                dashGauge2.SetActive(true);
-                dashGauge3.SetActive(true);
-                dashGauge4.SetActive(true);
+                GameManager.instance.dashGauge1.SetActive(true);
+                GameManager.instance.dashGauge2.SetActive(true);
+                GameManager.instance.dashGauge3.SetActive(true);
+                GameManager.instance.dashGauge4.SetActive(true);
                 break;
             case 5:
-                dashGauge1.SetActive(true);
-                dashGauge2.SetActive(true);
-                dashGauge3.SetActive(true);
-                dashGauge4.SetActive(true);
-                dashGauge5.SetActive(true);
+                GameManager.instance.dashGauge1.SetActive(true);
+                GameManager.instance.dashGauge2.SetActive(true);
+                GameManager.instance.dashGauge3.SetActive(true);
+                GameManager.instance.dashGauge4.SetActive(true);
+                GameManager.instance.dashGauge5.SetActive(true);
                 break;
             case 6:
-                dashGauge1.SetActive(true);
-                dashGauge2.SetActive(true);
-                dashGauge3.SetActive(true);
-                dashGauge4.SetActive(true);
-                dashGauge5.SetActive(true);
-                dashGauge6.SetActive(true);
+                GameManager.instance.dashGauge1.SetActive(true);
+                GameManager.instance.dashGauge2.SetActive(true);
+                GameManager.instance.dashGauge3.SetActive(true);
+                GameManager.instance.dashGauge4.SetActive(true);
+                GameManager.instance.dashGauge5.SetActive(true);
+                GameManager.instance.dashGauge6.SetActive(true);
                 break;
         }
 
         // 대쉬 프레임
-        dashFrame3.SetActive(false);
-        dashFrame4.SetActive(false);
-        dashFrame5.SetActive(false);
-        dashFrame6.SetActive(false);
+        GameManager.instance.dashFrame3.SetActive(false);
+        GameManager.instance.dashFrame4.SetActive(false);
+        GameManager.instance.dashFrame5.SetActive(false);
+        GameManager.instance.dashFrame6.SetActive(false);
 
         switch (GameManager.instance.maxDashChargeCount + GameManager.instance.increased_MaxDashCount)
         {
             case 2:
-                gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(180, -40);
+                GameManager.instance.gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(180, -40);
 
-                dashGauge3.SetActive(false);
-                dashGauge4.SetActive(false);
-                dashGauge5.SetActive(false);
-                dashGauge6.SetActive(false);
+                GameManager.instance.dashGauge3.SetActive(false);
+                GameManager.instance.dashGauge4.SetActive(false);
+                GameManager.instance.dashGauge5.SetActive(false);
+                GameManager.instance.dashGauge6.SetActive(false);
                 break;
             case 3:
-                gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(270, -40);
-                dashFrame3.SetActive(true);
+                GameManager.instance.gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(270, -40);
+                GameManager.instance.dashFrame3.SetActive(true);
 
-                dashGauge4.SetActive(false);
-                dashGauge5.SetActive(false);
-                dashGauge6.SetActive(false);
+                GameManager.instance.dashGauge4.SetActive(false);
+                GameManager.instance.dashGauge5.SetActive(false);
+                GameManager.instance.dashGauge6.SetActive(false);
                 break;
             case 4:
-                gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(360, -40);
-                dashFrame3.SetActive(true);
-                dashFrame4.SetActive(true);
+                GameManager.instance.gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(360, -40);
+                GameManager.instance.dashFrame3.SetActive(true);
+                GameManager.instance.dashFrame4.SetActive(true);
 
-                dashGauge5.SetActive(false);
-                dashGauge6.SetActive(false);
+                GameManager.instance.dashGauge5.SetActive(false);
+                GameManager.instance.dashGauge6.SetActive(false);
                 break;
             case 5:
-                gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(450, -40);
-                dashFrame3.SetActive(true);
-                dashFrame4.SetActive(true);
-                dashFrame5.SetActive(true);
+                GameManager.instance.gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(450, -40);
+                GameManager.instance.dashFrame3.SetActive(true);
+                GameManager.instance.dashFrame4.SetActive(true);
+                GameManager.instance.dashFrame5.SetActive(true);
 
-                dashGauge6.SetActive(false);
+                GameManager.instance.dashGauge6.SetActive(false);
                 break;
             case 6:
-                gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(540, -40);
-                dashFrame3.SetActive(true);
-                dashFrame4.SetActive(true);
-                dashFrame5.SetActive(true);
-                dashFrame6.SetActive(true);
+                GameManager.instance.gaugeLastFrame.GetComponent<RectTransform>().anchoredPosition = new Vector2(540, -40);
+                GameManager.instance.dashFrame3.SetActive(true);
+                GameManager.instance.dashFrame4.SetActive(true);
+                GameManager.instance.dashFrame5.SetActive(true);
+                GameManager.instance.dashFrame6.SetActive(true);
                 break;
         }
 
@@ -594,15 +589,15 @@ public class PlayerManager : EntityManager
             transform.localScale = scale; // 플레이어의 스케일 값을 재정의
 
             // 파티클 방향 전환
-            ParticleSystemRenderer particleRenderer = GameManager.instance.footDustParticle.GetComponent<ParticleSystemRenderer>(); // 파티클 렌더러 모듈 가져오기
+            ParticleSystemRenderer particleRenderer = footDustParticle.GetComponent<ParticleSystemRenderer>(); // 파티클 렌더러 모듈 가져오기
             particleRenderer.flip = new Vector3(1, 0, 0);
 
             // 파티클이 날려가는 방향 전환
-            ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime = GameManager.instance.footDustParticle.velocityOverLifetime;
+            ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime = footDustParticle.velocityOverLifetime;
             velocityOverLifetime.x = 1;
 
             // 파티클 위치를 플레이어보다 좀 더 뒤로 이동
-            ParticleSystem.ShapeModule shape = GameManager.instance.footDustParticle.shape;
+            ParticleSystem.ShapeModule shape = footDustParticle.shape;
             shape.position = new Vector3(0.25f, -0.5f, 0);
         }
         else if (h > 0)
@@ -613,15 +608,15 @@ public class PlayerManager : EntityManager
             transform.localScale = scale; // 플레이어의 스케일 값을 재정의
 
             // 파티클 방향 전환
-            ParticleSystemRenderer particleRenderer = GameManager.instance.footDustParticle.GetComponent<ParticleSystemRenderer>(); // 파티클 렌더러 모듈 가져오기
+            ParticleSystemRenderer particleRenderer = footDustParticle.GetComponent<ParticleSystemRenderer>(); // 파티클 렌더러 모듈 가져오기
             particleRenderer.flip = new Vector3(0, 0, 0);
 
             // 파티클이 날려가는 방향 전환
-            ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime = GameManager.instance.footDustParticle.velocityOverLifetime;
+            ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime = footDustParticle.velocityOverLifetime;
             velocityOverLifetime.x = -1;
 
             // 파티클 위치를 플레이어보다 좀 더 뒤로 이동
-            ParticleSystem.ShapeModule shape = GameManager.instance.footDustParticle.shape;
+            ParticleSystem.ShapeModule shape = footDustParticle.shape;
             shape.position = new Vector3(-0.25f, -0.5f, 0);
         }
 
@@ -650,7 +645,7 @@ public class PlayerManager : EntityManager
         if (!isGround)
         {
             // 2단 점프 파티클 실행
-            GameManager.instance.doubleJumpParticle.Play();
+            doubleJumpParticle.Play();
         }
     }
 
@@ -729,6 +724,19 @@ public class PlayerManager : EntityManager
     // 플레이어가 대미지를 입는 함수
     public override void TakeDamage(int damage, Transform Pos, bool isCritical)
     {
+        // 넉백
+        float x = transform.position.x - Pos.position.x; // 밀려날 방향
+        if (x > 0)
+        {
+            rb.velocity = new Vector2(3f, rb.velocity.y); // 오른쪽으로 3만큼 넉백 
+            Debug.Log("넉백");
+        }
+        else if (x < 0)
+        {
+            rb.velocity = new Vector2(-3f, rb.velocity.y); // 왼쪽으로 3만큼 넉백
+            Debug.Log("넉백");
+        }
+
         // 죽었거나 무적시간이라면 리턴
         if (anim.GetBool("isDeath") || !GameManager.instance.canHitPlayer)
         {
@@ -742,17 +750,6 @@ public class PlayerManager : EntityManager
 
         anim.SetTrigger("Hit");
         SoundManager.instance.PlaySound("Player_Hit"); // 대미지 효과음
-
-        // 넉백
-        float x = transform.position.x - Pos.position.x; // 밀려날 방향
-        if (x > 0)
-        {
-            rb.velocity = new Vector2(3f, rb.velocity.y); // 오른쪽으로 3만큼 넉백 
-        }
-        else if (x < 0)
-        {
-            rb.velocity = new Vector2(-3f, rb.velocity.y); // 왼쪽으로 3만큼 넉백 // 무기 밀치기 값도 받아오면 무기마다 밀치기 다르게 가능
-        }
 
         // 무적시간
         StartCoroutine("HitTimeCheck");
@@ -771,7 +768,7 @@ public class PlayerManager : EntityManager
         GameManager.instance.invectoryPanel.SetActive(GameManager.instance.activeInventoty); // 인벤토리 닫기
 
         // 사망 정보창 정보 업데이트
-        GameManager.instance.deathMenu_TimeText.text = (GameManager.instance.playTime / 60).ToString("00") + "분 " + (GameManager.instance.playTime % 60).ToString("00") + "초"; // 시간
+        GameManager.instance.deathMenu_TimeText.text = (GameManager.instance.playDungeonTime / 60).ToString("00") + "분 " + (GameManager.instance.playDungeonTime % 60).ToString("00") + "초"; // 시간
         GameManager.instance.deathMenu_LocationText.text = string.Format("{0} {1}층", GameManager.instance.playerLocation, GameManager.instance.currentDungeonFloor); // 위치
         GameManager.instance.goldPenaltyText.SetActive(true); // 패널티 있음
         GameManager.instance.deathMenu_GoldText.text = string.Format("{0:n0} G", GameManager.instance.gold / 2); // 소지금
@@ -881,7 +878,7 @@ public class PlayerManager : EntityManager
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Move") && isGround)
         {
-            GameManager.instance.footDustParticle.Play(); // 달리기 먼지 파티클
+            footDustParticle.Play(); // 달리기 먼지 파티클
 
             SoundManager.instance.PlaySound("Player_Step"); // 발소리 효과음
         }

@@ -23,6 +23,6 @@ MonoBehaviour:
   increase_CriticalValue: 0
   increase_MoveSpeed: 1
   increase_Damage: 0
-  increase_JumpPower: 1
+  increase_JumpPower: 1.25
   increase_DashCount: 0
   increase_JumpCount: 0

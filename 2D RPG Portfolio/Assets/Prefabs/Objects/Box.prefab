@@ -155,8 +155,11 @@ MonoBehaviour:
   attackRadius: []
   attackCoolDown: 0
   nextAttackTime: 0
-  minItemDrop: 3
-  maxItemDrop: 5
+  sr: {fileID: 0}
+  hitAnimFadeTime: 0
+  isHitMonster: 0
+  minItemDrop: 2
+  maxItemDrop: 3
 --- !u!251 &6990990331837032153
 PlatformEffector2D:
   m_ObjectHideFlags: 0

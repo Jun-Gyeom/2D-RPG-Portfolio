@@ -21,8 +21,8 @@ MonoBehaviour:
   increase_Health: 0
   increase_CriticalPercentage: 0
   increase_CriticalValue: 0
-  increase_MoveSpeed: 0.5
+  increase_MoveSpeed: 0.75
   increase_Damage: 0
-  increase_JumpPower: 0.5
+  increase_JumpPower: 0.75
   increase_DashCount: 1
   increase_JumpCount: 1

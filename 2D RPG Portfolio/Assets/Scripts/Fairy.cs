@@ -15,8 +15,6 @@ public class Fairy : MonoBehaviour
     CircleCollider2D cc; // 페어리의 트리거인 사이클 콜라이더 
     public Transform hudPos; // 허드텍스트 생성 위치
 
-    PlayerManager pm; // 플레이어 매니저
-
     public FairySize fairySize; // 페어리 사이즈
 
     private int getHealthAmount; // HP 획득량
@@ -32,8 +30,6 @@ public class Fairy : MonoBehaviour
     {
         StartCoroutine(TriggerDelayTime()); // 트리거 딜레이 타임 코루틴을 실행해서 페어리가 생성되자마자 획득하는 것을 방지
 
-        pm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>(); // 플레이어 매니저 할당
-
         // 사이즈에 따른 HP 획득량 설정
         switch (fairySize)
         {
@@ -47,7 +43,7 @@ public class Fairy : MonoBehaviour
                 break;
             // 사이즈 L
             case FairySize.Size_L:
-                getHealthAmount = 25; // HP 획득량 25로 설정
+                getHealthAmount = 30; // HP 획득량 30로 설정
                 break;
             // 사이즈 XL
             case FairySize.Size_XL:
@@ -62,7 +58,7 @@ public class Fairy : MonoBehaviour
         // 트리거를 발동시킨 오브젝트의 태그가 플레이어이고 플레이어가 죽지 않았을 때
         if (collision.gameObject.CompareTag("Player") && !GameManager.instance.isDie)
         {
-            pm.health += getHealthAmount; // HP 획득량 만큼 체력 얻음
+            PlayerManager.instance.health += getHealthAmount; // HP 획득량 만큼 체력 얻음
 
             // 허드 텍스트 생성
             GameObject getHp_HudText = ObjectPoolingManager.instance.GetObject("HudText_GetHp");

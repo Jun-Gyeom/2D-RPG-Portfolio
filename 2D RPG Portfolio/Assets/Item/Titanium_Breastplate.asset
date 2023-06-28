@@ -18,10 +18,10 @@ MonoBehaviour:
   itemClass: 2
   itemImage: {fileID: 21300000, guid: d0ac2ae30b4bfc2429f2b1e79d6ce432, type: 3}
   objectPoolName: EquipItem_TitaniumBreastplate
-  increase_Health: 45
+  increase_Health: 40
   increase_CriticalPercentage: 0.05
   increase_CriticalValue: 0
-  increase_MoveSpeed: 0
+  increase_MoveSpeed: 0.5
   increase_Damage: 0
   increase_JumpPower: 0
   increase_DashCount: 0

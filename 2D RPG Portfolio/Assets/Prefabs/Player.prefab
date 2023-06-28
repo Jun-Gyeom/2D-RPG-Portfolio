@@ -9928,8 +9928,9 @@ MonoBehaviour:
   - 1.0625
   attackCoolDown: 0.5
   nextAttackTime: 1
-  sr: {fileID: 0}
+  sr: {fileID: 4109158951589281528}
   hitAnimFadeTime: 0.5
+  isHitMonster: 0
   anim: {fileID: 0}
   jumpCount: 0
   isWall: 0
@@ -9937,10 +9938,11 @@ MonoBehaviour:
   attackCombo: 0
   canHitTime: 0.5
   isCritical: 0
-  canHit: 1
   dashDistance: 7.5
   dashCooldown: 2
   dashChargeCount: 0
+  footDustParticle: {fileID: 1845629401}
+  doubleJumpParticle: {fileID: 41382939}
   hp_Bar: {fileID: 0}
   hp_fill_GameObject: {fileID: 0}
   hp_fill_Lerp_GameObject: {fileID: 0}
@@ -9954,17 +9956,6 @@ MonoBehaviour:
   hpText: {fileID: 0}
   expText: {fileID: 0}
   levelText: {fileID: 0}
-  dashGauge1: {fileID: 0}
-  dashGauge2: {fileID: 0}
-  dashGauge3: {fileID: 0}
-  dashGauge4: {fileID: 0}
-  dashGauge5: {fileID: 0}
-  dashGauge6: {fileID: 0}
-  dashFrame3: {fileID: 0}
-  dashFrame4: {fileID: 0}
-  dashFrame5: {fileID: 0}
-  dashFrame6: {fileID: 0}
-  gaugeLastFrame: {fileID: 0}
   damageScreen_AlphaSpeed: 3
 --- !u!81 &1136223532841291347
 AudioListener:

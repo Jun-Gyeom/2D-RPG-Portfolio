@@ -123,8 +123,6 @@ public class GiantBat : MonsterManager
 
         base.TakeDamage(damage, Pos, isCritical); // 대미지 적용
 
-        anim.SetTrigger("Hit"); // 맞는 애니메이션
-
         // 크리티컬이라면
         if (isCritical)
         {

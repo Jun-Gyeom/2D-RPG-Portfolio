@@ -5452,8 +5452,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 85
-  attackDamage: 8
+  maxHealth: 120
+  attackDamage: 12
   moveSpeed: 0
   attackTransform: []
   attackRadius: []
@@ -5475,8 +5475,8 @@ MonoBehaviour:
   hp_fill_Lerp_GameObject: {fileID: 6335414407708596227}
   hp_fill: {fileID: 4239741705793788870}
   hp_fill_Lerp: {fileID: 263032630663004752}
-  minItemDrop: 14
-  maxItemDrop: 18
+  minItemDrop: 8
+  maxItemDrop: 10
   hudPos: {fileID: 5886107669821310689}
   monsetDie_Particle: {fileID: 8023096580568279304}
   rb: {fileID: 9131975849451132072}

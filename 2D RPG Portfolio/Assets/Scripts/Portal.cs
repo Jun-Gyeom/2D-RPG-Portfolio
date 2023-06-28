@@ -30,7 +30,7 @@ public class Portal : MonoBehaviour
             keyUI_F.SetActive(isTrigger);
 
             // 포탈 탑승
-            if (isTrigger && anim.GetCurrentAnimatorStateInfo(0).IsName("Open")) // 포탈 트리거를 발동 중이고, 포탈 오픈 애니메이션이 실행 중일 때
+            if (isTrigger && anim.GetCurrentAnimatorStateInfo(0).IsName("Open") && !GameManager.instance.dontMove) // 포탈 트리거를 발동 중이고, 포탈 오픈 애니메이션이 실행 중이고 움직임 제어 중이 아닐 때
             {
                 // F키를 누르면
                 if (Input.GetKeyDown(KeyCode.F))

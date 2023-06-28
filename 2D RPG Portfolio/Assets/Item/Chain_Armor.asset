@@ -18,10 +18,10 @@ MonoBehaviour:
   itemClass: 1
   itemImage: {fileID: 21300000, guid: e044fac17b1d6064c8f91ad9b778da35, type: 3}
   objectPoolName: EquipItem_ChainArmor
-  increase_Health: 25
+  increase_Health: 30
   increase_CriticalPercentage: 0
   increase_CriticalValue: 0
-  increase_MoveSpeed: -0.5
+  increase_MoveSpeed: -0.25
   increase_Damage: 0
   increase_JumpPower: 0
   increase_DashCount: 0

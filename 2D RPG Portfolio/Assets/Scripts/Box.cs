@@ -57,5 +57,15 @@ public class Box : EntityManager
                 bullion.transform.position = this.transform.position; // 위치 초기화
             }
         }
+
+        // 페어리 드롭
+        float rand_ItemClass = Random.Range(0f, 1f);
+
+        if (rand_ItemClass < 0.05f) // (5%) 
+        {
+            Debug.Log("페어리 발견!");
+            GameObject fairy = ObjectPoolingManager.instance.GetObject("Item_FairyS");
+            fairy.transform.position = transform.transform.position;
+        }
     }
 }

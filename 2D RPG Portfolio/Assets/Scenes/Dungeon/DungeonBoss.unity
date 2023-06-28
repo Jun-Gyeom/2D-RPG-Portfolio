@@ -42882,7 +42882,7 @@ PrefabInstance:
       objectReference: {fileID: 1752280603}
     - target: {fileID: 5966201797701346266, guid: c58781b3ecf8fc441847cb8cc4b2fdbb, type: 3}
       propertyPath: attackDamage
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5966201797701346267, guid: c58781b3ecf8fc441847cb8cc4b2fdbb, type: 3}
       propertyPath: m_RootOrder
@@ -49290,8 +49290,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 50
-  attackDamage: 4
+  maxHealth: 1000
+  attackDamage: 6
   moveSpeed: 0
   attackTransform:
   - {fileID: 373538983}
@@ -49487,7 +49487,7 @@ PrefabInstance:
       objectReference: {fileID: 5966201797952869627}
     - target: {fileID: 5966201797701346266, guid: c58781b3ecf8fc441847cb8cc4b2fdbb, type: 3}
       propertyPath: attackDamage
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5966201797701346267, guid: c58781b3ecf8fc441847cb8cc4b2fdbb, type: 3}
       propertyPath: m_RootOrder
