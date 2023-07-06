@@ -17,7 +17,7 @@ public class SkelManager : MonsterManager
     public virtual void Move()
     {
         // 몬스터가 죽었거나 공격 중이라면 이동 금지
-        if (isDie || (WeaponAnim.GetCurrentAnimatorStateInfo(0).IsName("Skel_ShortSword_Attack") && (WeaponAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0f || WeaponAnim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)))
+        if (isDie || WeaponAnim.GetCurrentAnimatorStateInfo(0).IsName("Skel_ShortSword_Attack") || WeaponAnim.GetCurrentAnimatorStateInfo(0).IsName("Skel_GraveSword_Attack"))
         {
             return;
         }

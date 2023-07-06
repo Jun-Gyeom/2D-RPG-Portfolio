@@ -5294,7 +5294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   maxHealth: 100
-  attackDamage: 12
+  attackDamage: 10
   moveSpeed: 0
   attackTransform: []
   attackRadius: []

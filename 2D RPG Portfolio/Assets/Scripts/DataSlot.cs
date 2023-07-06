@@ -60,15 +60,36 @@ public class DataSlot : MonoBehaviour
 
     }
 
-    // 슬롯 세이브 파일 삭제
-    public void DeleteSavefile(int number)
+    // 슬롯 데이터 삭제 버튼 클릭했을 때 호출할 메서드
+    public void DeleteDataButtonClick(int number)
     {
+        // 버튼 클릭 사운드
+        SoundManager.instance.PlaySound("ButtonClick");
+
         DataManager.instance.nowSlot = number; // 해당 슬롯 선택
+        GameManager.instance.realyDataClearPanel.SetActive(true); // 되묻는 창 활성화
+    }
+
+    // 세이브 파일 삭제
+    public void YesDeleteSaveFile()
+    {
+        // 버튼 클릭 사운드
+        SoundManager.instance.PlaySound("ButtonClick");
+
+        GameManager.instance.realyDataClearPanel.SetActive(false); // 되묻는 창 활성화
 
         DataManager.instance.DeleteSavefile(); // 세이브 파일 삭제
-
         UpdateSlotDataText(); // 슬롯 데이터 텍스트 갱신
     }
+
+    // 되묻는 창 닫기
+    public void RealyDataClearPanelClose()
+    {
+        // 버튼 클릭 사운드
+        SoundManager.instance.PlaySound("ButtonClick");
+        GameManager.instance.realyDataClearPanel.SetActive(false); // 되묻는 창 비활성화
+    }
+
 
     // 슬롯 데이터 텍스트 갱신
     public void UpdateSlotDataText()
@@ -86,12 +107,12 @@ public class DataSlot : MonoBehaviour
                 if (DataManager.instance.nowPlayer.highFloor > 0)
                 {
                     dataText[i].text =
-                    $"< 플레이 시간 >\n{(DataManager.instance.nowPlayer.playTime / 3600).ToString("00") + "H " + ((DataManager.instance.nowPlayer.playTime % 3600) / 60).ToString("00") + "M"}\n\n< 도달한 층 >\n{DataManager.instance.nowPlayer.highFloor}F\n\n< 레벨 >\n{DataManager.instance.nowPlayer.level + 1}LV\n\n< 소지금 >\n{string.Format("{0:n0}G", DataManager.instance.nowPlayer.gold)}"; // 슬롯 데이터 정보 텍스트 표시
+                    $"< 플레이 시간 >\n{Mathf.FloorToInt(DataManager.instance.nowPlayer.playTime / 3600).ToString("D2") + "H " + (Mathf.FloorToInt(DataManager.instance.nowPlayer.playTime / 60) % 60).ToString("D2") + "M"}\n\n< 도달한 층 >\n{DataManager.instance.nowPlayer.highFloor}F\n\n< 레벨 >\n{DataManager.instance.nowPlayer.level + 1}LV\n\n< 소지금 >\n{string.Format("{0:n0}G", DataManager.instance.nowPlayer.gold)}"; // 슬롯 데이터 정보 텍스트 표시
                 }
                 else
                 {
                     dataText[i].text =
-                    $"< 플레이 시간 >\n{(DataManager.instance.nowPlayer.playTime / 3600).ToString("00") + "H " + ((DataManager.instance.nowPlayer.playTime % 3600) / 60).ToString("00") + "M"}\n\n< 레벨 >\n{DataManager.instance.nowPlayer.level + 1}LV\n\n< 소지금 >\n{string.Format("{0:n0}G", DataManager.instance.nowPlayer.gold)}"; // 슬롯 데이터 정보 텍스트 표시
+                    $"< 플레이 시간 >\n{Mathf.FloorToInt(DataManager.instance.nowPlayer.playTime / 3600).ToString("D2") + "H " + (Mathf.FloorToInt(DataManager.instance.nowPlayer.playTime / 60) % 60).ToString("D2") + "M"}\n\n< 레벨 >\n{DataManager.instance.nowPlayer.level + 1}LV\n\n< 소지금 >\n{string.Format("{0:n0}G", DataManager.instance.nowPlayer.gold)}"; // 슬롯 데이터 정보 텍스트 표시
                 }
             }
             else // 데이터가 없는 경우

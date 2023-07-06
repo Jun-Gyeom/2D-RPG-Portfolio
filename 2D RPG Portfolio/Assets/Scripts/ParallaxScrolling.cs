@@ -6,7 +6,7 @@ public class ParallaxScrolling : MonoBehaviour
 {
     public Vector2 parallaxEffect;
 
-    private Transform camTransform;
+    public Transform camTransform;
     private Vector3 lastCamPos;
 
     private void Start()

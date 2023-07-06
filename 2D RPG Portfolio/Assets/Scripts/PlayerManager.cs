@@ -542,8 +542,9 @@ public class PlayerManager : EntityManager
             }
         }
     }
-    void FixedUpdate()
-    {        
+
+    private void LateUpdate()
+    {
         GroundCheck(); // 땅에 있는지 체크
         WallCheck(); // 벽에 붙어있는지 체크
 
@@ -724,6 +725,12 @@ public class PlayerManager : EntityManager
     // 플레이어가 대미지를 입는 함수
     public override void TakeDamage(int damage, Transform Pos, bool isCritical)
     {
+        // 죽었거나 무적시간이라면 리턴
+        if (anim.GetBool("isDeath") || !GameManager.instance.canHitPlayer)
+        {
+            return;
+        }
+
         // 넉백
         float x = transform.position.x - Pos.position.x; // 밀려날 방향
         if (x > 0)
@@ -735,12 +742,6 @@ public class PlayerManager : EntityManager
         {
             rb.velocity = new Vector2(-3f, rb.velocity.y); // 왼쪽으로 3만큼 넉백
             Debug.Log("넉백");
-        }
-
-        // 죽었거나 무적시간이라면 리턴
-        if (anim.GetBool("isDeath") || !GameManager.instance.canHitPlayer)
-        {
-            return;
         }
 
         base.TakeDamage(damage, Pos, isCritical); // 대미지 부여

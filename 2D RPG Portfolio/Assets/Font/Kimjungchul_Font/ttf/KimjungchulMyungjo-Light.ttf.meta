@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 5dcd2d747d8edf14daf77519d3366814
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Kim jung chul Myungjo
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 6a160890bad53cb4aa1d80084445729e, type: 3}
+  - {fileID: 12800000, guid: 7879fa62aa281c2408517524d96782f1, type: 3}
+  - {fileID: 12800000, guid: 7294f8e6e60dfbc448e1d7e774e2cc54, type: 3}
+  - {fileID: 12800000, guid: 93475beec1359454e94b1889e6400977, type: 3}
+  - {fileID: 12800000, guid: 65c564052f8242442b827793d21ea60f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

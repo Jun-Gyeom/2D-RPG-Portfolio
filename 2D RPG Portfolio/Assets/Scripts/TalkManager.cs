@@ -44,7 +44,7 @@ public class TalkManager : MonoBehaviour
         talkData.Add(3000, new string[] { "안녕하세요 용사님! 무엇을 도와드릴까요?"});
 
         // 비석
-        talkData.Add(4000, new string[] { "개발자: 김준겸\n제작기간: 약 3개월\n\"버그는 사절합니다.\" 라고 쓰여있다." });
+        talkData.Add(4000, new string[] { "개발자: 김준겸\n제작기간: 약 3개월\n\"깨지고 부서져라\" 라고 쓰여있다." });
     }
 
     // 대화 불러오기 함수

@@ -5452,7 +5452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 120
+  maxHealth: 80
   attackDamage: 12
   moveSpeed: 0
   attackTransform: []

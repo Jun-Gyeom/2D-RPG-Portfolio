@@ -59,16 +59,16 @@ public class Skel_GraveSword_Monster : SkelManager
         {
             foreach (Collider2D player in players)
             {
-                GameManager.instance.failCause = "그레이브소드 스켈레톤에게 패배"; // 사망 이유
+                GameManager.instance.failCause = "스켈레톤 정예 전사에게 패배"; // 사망 이유
 
                 attackPos = transform;
                 player.GetComponent<PlayerManager>().TakeDamage(attackDamage, attackPos, false); // 마지막 인수 = 몬스터는 크리티컬 공격 없음
             }
 
             nextAttackTime = Time.time + attackCoolDown;
-
-            isAttack = false; // 공격 상태를 false로 변경
         }
+
+        isAttack = false; // 공격 상태를 false로 변경
     }
 
     public override void TakeDamage(int damage, Transform Pos, bool isCritical)

@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject realyEscapeDungeonPanel; // 던전을 나갈 것인지 되묻는 창 오브젝트
     public GameObject realyGoMainPanel; // 메인화면으로 갈 것인지 되묻는 창 오브젝트
+    public GameObject realyDataClearPanel; // 세이브파일 데이터를 삭제할 것인지 되묻는 창 오브젝트
 
     public TMP_Text townLocationText; // 마을 일시정지 메뉴플레이어 현재 위치 텍스트
     public TMP_Text townEscGoldText; // 마을 일시정지 메뉴 소지금 텍스트
@@ -619,7 +620,7 @@ public class GameManager : MonoBehaviour
                 clearMenu_GameClearTitleText.text = "게임 클리어"; // 제목 텍스트 변경
                 deathMenu_DeathCauseText.text = "축하합니다. 게임을 클리어하셨습니다!"; // 게임 클리어 텍스트
                 clearMenu_ComentTitleText.text = "개발자 코멘트"; // 제목 텍스트 변경
-                instance.deathMenu_NextExpText.text = "플레이해주셔서 감사합니다. \n열심히 만들었습니다."; // 개발자 코멘트
+                instance.deathMenu_NextExpText.text = "플레이해주셔서 감사합니다."; // 개발자 코멘트
 
                 // 획득했던 아이템
                 for (int i = 0; i < iv.slots.Length; i++)

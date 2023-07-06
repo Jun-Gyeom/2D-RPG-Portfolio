@@ -40,7 +40,7 @@ public class SkelDog : MonsterManager
                 {
                     foreach (Collider2D player in players)
                     {
-                        GameManager.instance.failCause = "스켈레독에게 패배"; // 사망 이유
+                        GameManager.instance.failCause = "스켈리독에게 패배"; // 사망 이유
 
                         attackPos = transform;
                         player.GetComponent<PlayerManager>().TakeDamage(attackDamage, attackPos, false); // 마지막 인수 = 몬스터는 크리티컬 공격 없음
@@ -233,6 +233,8 @@ public class SkelDog : MonsterManager
         CancelInvoke("Hide_HpBar"); // 초기화
         Invoke("Hide_HpBar", 2f); // 2초 후 HP 바 비활성화
 
+        isAttack = false; // 공격 상태를 false로 변경
+
         base.TakeDamage(damage, Pos, isCritical); // 대미지 적용
 
         // 크리티컬이라면
@@ -285,6 +287,7 @@ public class SkelDog : MonsterManager
 
         anim.SetTrigger("Die"); // 죽는 애니메이션
         hp_Bar.gameObject.SetActive(false); // HP 바 비활성화
+        isAttack = false; // 공격 상태를 false로 변경
     }
 
     // 아이템 드롭

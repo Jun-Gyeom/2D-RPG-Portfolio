@@ -235,7 +235,7 @@ public class GiantBat : MonsterManager
             fb[k].bulletPos = leftSideBulletPos; // 파이어볼 발사 위치
             fb[k].shooterPos = transform; // 발사한 객체의 위치
             fb[k].damage = attackDamage; // 공격력
-            fb[k].failCause = "거대 박쥐에게 당함"; // 사망 사유
+            fb[k].failCause = "자이언트 박쥐에게 당함"; // 사망 사유
 
             // 파이어볼 세팅
             fb[k].Setting();
@@ -256,7 +256,7 @@ public class GiantBat : MonsterManager
             fb[k].bulletPos = bulletPos; // 파이어볼 발사 위치
             fb[k].shooterPos = transform; // 발사한 객체의 위치
             fb[k].damage = attackDamage; // 공격력
-            fb[k].failCause = "거대 박쥐에게 패배"; // 사망 사유
+            fb[k].failCause = "자이언트 박쥐에게 패배"; // 사망 사유
 
             // 파이어볼 세팅
             fb[k].Setting();
@@ -278,7 +278,7 @@ public class GiantBat : MonsterManager
             fb[k].bulletPos = rightSideBulletPos; // 파이어볼 발사 위치
             fb[k].shooterPos = transform; // 발사한 객체의 위치
             fb[k].damage = attackDamage; // 공격력
-            fb[k].failCause = "거대 박쥐에게 당함"; // 사망 사유
+            fb[k].failCause = "자이언트 박쥐에게 패배"; // 사망 사유
 
             // 파이어볼 세팅
             fb[k].Setting();

@@ -17,6 +17,7 @@ public class GiantRedBat : MonsterManager
     public float fireBallSpeed; // 파이어볼 속도
     public float fireBallDistance; // 파이어볼 사거리
 
+    public GameObject axisArmParentsObject; // 축 오브젝트의 x축이 반전되는 것을 막기 위한 오브젝트
     public GameObject axisArmObject; // 파이어볼 생성 시 회전시킬 축 (팔)
     public GameObject aimPosObject; // 파이어볼을 발사할 방향 값을 가진 오브젝트
     public Transform bulletPos; // 파이어볼을 발사할 위치
@@ -48,6 +49,7 @@ public class GiantRedBat : MonsterManager
         AimPlayer();
         MonsterAI();
 
+
         // 몬스터 보는 방향
         if (targetTransform.position.x < transform.position.x)
         {
@@ -59,6 +61,10 @@ public class GiantRedBat : MonsterManager
             Vector3 hpScale = hp_Bar.transform.localScale;
             hpScale.x = -Mathf.Abs(hpScale.x);
             hp_Bar.transform.localScale = hpScale; // HP 바는 항상 오른쪽을 봄
+
+            Vector3 axisArmParentsScale = axisArmParentsObject.transform.localScale;
+            axisArmParentsScale.x = -Mathf.Abs(axisArmParentsScale.x);
+            axisArmParentsObject.transform.localScale = axisArmParentsScale; // 파이어볼 회전축은 항상 오른쪽을 봄
         }
         else if (targetTransform.position.x > transform.position.x)
         {
@@ -70,6 +76,10 @@ public class GiantRedBat : MonsterManager
             Vector3 hpScale = hp_Bar.transform.localScale;
             hpScale.x = Mathf.Abs(hpScale.x);
             hp_Bar.transform.localScale = hpScale; // HP 바는 항상 오른쪽을 봄
+
+            Vector3 axisArmParentsScale = axisArmParentsObject.transform.localScale;
+            axisArmParentsScale.x = Mathf.Abs(axisArmParentsScale.x);
+            axisArmParentsObject.transform.localScale = axisArmParentsScale; // 파이어볼 회전축은 항상 오른쪽을 봄
         }
 
         // 공격 상태라면
@@ -244,7 +254,7 @@ public class GiantRedBat : MonsterManager
             fb[i].bulletPos = bulletPos; // 파이어볼 발사 위치
             fb[i].shooterPos = transform; // 발사한 객체의 위치
             fb[i].damage = attackDamage; // 공격력
-            fb[i].failCause = "붉은 거대 박쥐에게 패배"; // 사망 사유
+            fb[i].failCause = "붉은 자이언트 박쥐에게 패배"; // 사망 사유
 
             // 파이어볼 세팅
             fb[i].Setting(); 

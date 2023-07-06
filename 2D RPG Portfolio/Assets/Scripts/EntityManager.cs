@@ -56,9 +56,19 @@ public class EntityManager : MonoBehaviour
             health -= damage;
         }
 
+        // HP가 0 이하로 내려갔을 때
         if (health <= 0)
         {
-            Die();
+            // 튜토리얼 진행 중인 플레이어라면
+            if (gameObject.tag == "Player" && GameManager.instance.isTutorial)
+            {
+                health = 1f; // 체력 1 미만으로 내려가지 않게 함
+            }
+            // 일반적인 상황이라면
+            else
+            {
+                Die(); // 사망 함수 호출
+            }
         }
     }
 
