@@ -429,7 +429,7 @@ public class PlayerManager : EntityManager
         }
 
         // 인벤토리 여닫기
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             // 대화 중이거나 상점이 열려있다면 인벤토리 여닫기 안함
             if (GameManager.instance.isTalk || GameManager.instance.townShopPanel.activeSelf || GameManager.instance.dungeonShopPanel.activeSelf)

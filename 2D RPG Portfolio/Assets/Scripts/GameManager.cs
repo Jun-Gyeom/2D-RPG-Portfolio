@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public TownShop town_Shop; // 마을 상점 스크립트
     public DungeonShop dungeon_Shop; // 던전 상점 스크립트
     public GameObject fairySpawnPoint; // 페어리 스폰포인트 오브젝트
+    public GameObject miniMapTransformObject; // 미니맵 위치 오브젝트
 
     public bool isDropFairy; // 현재 스테이지에 페어리를 소환했는지 체크
 
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
 
     // UI 관련
     public GameObject hud_CanvasObject; // HUD 캔버스 오브젝트
+    public GameObject miniMapCameraObject; // 미니맵 카메라 오브젝트
 
     public TMP_Text goldText; // 보유한 골드량 텍스트 (좌측 상단)
 
@@ -218,6 +220,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager가 삭제되지 않음
 
         DontDestroyOnLoad(hud_CanvasObject); // HUD 캔버스 DontDestroy 씬으로 이동
+        DontDestroyOnLoad(miniMapCameraObject); // 미니맵 카메라 DontDestroy 씬으로 이동
 
         // 이벤트 등록
         SceneManager.sceneLoaded += LoadedsceneEvent;
@@ -421,6 +424,14 @@ public class GameManager : MonoBehaviour
                     StageMonsterCheck(); // 게임매니저의 스테이지 몬스터 체크 함수 실행
                 }
 
+                // 미니맵 위치가 할당되지 않았다면
+                if (miniMapTransformObject == null)
+                {
+                    miniMapTransformObject = GameObject.Find("TransformOfMiniMapCam"); // 미니맵 위치 할당
+
+                    miniMapCameraObject.transform.position = miniMapTransformObject.transform.position; // 미니맵 카메라 위치를 변경
+                }
+
                 SoundManager.instance.PlayBackgroundMusic("Cave"); // 튜토리얼 BGM 재생
 
                 break;
@@ -461,6 +472,14 @@ public class GameManager : MonoBehaviour
                     pt = GameObject.Find("Portal").GetComponent<Portal>(); // 포탈 할당
 
                     StageMonsterCheck(); // 게임매니저의 스테이지 몬스터 체크 함수 실행
+                }
+
+                // 미니맵 위치가 할당되지 않았다면
+                if (miniMapTransformObject == null)
+                {
+                    miniMapTransformObject = GameObject.Find("TransformOfMiniMapCam"); // 미니맵 위치 할당
+
+                    miniMapCameraObject.transform.position = miniMapTransformObject.transform.position; // 미니맵 카메라 위치를 변경
                 }
 
                 // 죽어서 온 것이라면
@@ -530,6 +549,14 @@ public class GameManager : MonoBehaviour
                     pt = GameObject.Find("Portal").GetComponent<Portal>(); // 포탈 할당
 
                     StageMonsterCheck(); // 게임매니저의 스테이지 몬스터 체크 함수 실행
+                }
+
+                // 미니맵 위치가 할당되지 않았다면
+                if (miniMapTransformObject == null)
+                {
+                    miniMapTransformObject = GameObject.Find("TransformOfMiniMapCam"); // 미니맵 위치 할당
+
+                    miniMapCameraObject.transform.position = miniMapTransformObject.transform.position; // 미니맵 카메라 위치를 변경
                 }
 
                 // 만약 현재 씬이 보스 씬이라면

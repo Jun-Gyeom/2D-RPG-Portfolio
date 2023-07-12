@@ -138,6 +138,9 @@ public class SkellBoss : MonsterManager
 
             GameManager.instance.dontMove = true; // 플레이어 움직임 불가능
 
+            // 미니맵 아이콘 활성화
+            miniMapIconObject.SetActive(true);
+
             // HP바 활성화
             Invoke("Show_HpBar", 2f);
 
@@ -202,6 +205,9 @@ public class SkellBoss : MonsterManager
         skellBoss_Anim.SetBool("isBattle", false);
         SoundManager.instance.StopBackgroundMusic();
         isBattleStart = false;
+
+        // 미니맵 아이콘 비활성화
+        miniMapIconObject.SetActive(false);
 
         // HP바 비활성화
         hp_Bar.SetActive(false);

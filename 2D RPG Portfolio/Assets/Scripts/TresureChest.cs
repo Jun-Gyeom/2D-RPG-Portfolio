@@ -7,6 +7,7 @@ public class TresureChest : MonoBehaviour
     public Animator anim; // 보물상자 애니메이터
 
     public GameObject keyUI_F; // F키 UI
+    public GameObject miniMapIconObject; // 미니맵 아이콘 오브젝트
 
     // 등장 아이템 리스트
     public List<ItemData> common_ItemList; // 일반 등급 아이템 리스트
@@ -58,6 +59,7 @@ public class TresureChest : MonoBehaviour
         SoundManager.instance.PlaySound("OpenTresure");
 
         keyUI_F.SetActive(false);
+        miniMapIconObject.SetActive(false); // 미니맵 아이콘 비활성화
 
         anim.SetBool("isOpen", true); // 상자 열기 애니메이션 재생
 

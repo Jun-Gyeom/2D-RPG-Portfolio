@@ -30,6 +30,9 @@ public class MonsterManager : EntityManager
     // 허드 텍스트 관련
     public Transform hudPos; // 허드텍스트 생성 위치
 
+    // 미니맵 아이콘 관련
+    public GameObject miniMapIconObject; // 미니맵 아이콘 오브젝트
+
     // 파티클 관련
     public ParticleSystem monsetDie_Particle; // 사망 파티클
 
@@ -39,6 +42,8 @@ public class MonsterManager : EntityManager
 
         // 죽는 사운드
         SoundManager.instance.PlaySound("EnemyDie");
+
+        miniMapIconObject.SetActive(false); // 미니맵 아이콘 비활성화
 
         monsetDie_Particle.Play(); // 사망 파티클 재생
 
